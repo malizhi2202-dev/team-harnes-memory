@@ -377,7 +377,7 @@
       <li>读候选归属与理由：信号分解包括 <span class="mono">explicit_user_selection / work_thread_owner / project_or_team_context / resource_path_and_revision / producer_identity / connector_metadata / participant_membership / recent_activity / content_semantics / historical_assignment</span>；置信度以「依据充分 / 有限 / 存在争议 / 尚未确认」表达，不显示虚假精确百分比。</li>
       <li>读候选目标与写权限：确认目标 MemorySpace 的写策略与 ACL，并验证 <span class="mono">target_scope ⊆ effective_scope</span>；目标空间管理员不能绕过来源 ACL。</li>
       <li>读脱敏预览、敏感性与来源血缘：确认脱敏版本与来源 revision；脱敏不扩大授权。</li>
-      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。</li>
+      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。四要素任一缺失时，候选显示<b>「溯源缺失」</b>并计入置信度争议：不得仅凭置信度自动落位，补齐溯源或人工豁免并附理由后方可继续。</li>
       <li>做决策：自动落位 / 自动暂存候选 / 人工确认（治理队列）/ 隔离；跨边界、敏感或存在冲突的场景必须请求有权主体确认（来源 Owner 同意 + 目标接受）。</li>
       <li>写决策记录：<span class="mono">candidate_scopes / selected_scope / signal_refs / decision_reason / policy_version / model_or_rule_version / confidence / decided_at / reviewer</span>。</li>
     </ol>

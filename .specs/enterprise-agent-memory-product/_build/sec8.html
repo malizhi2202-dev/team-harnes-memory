@@ -34,6 +34,9 @@
           <tr><td><b>RunGate</b></td><td>高风险工具副作用的动态执行准入，执行过程中持续重检。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>ActionProposal</b></td><td>默认不可执行的动作建议；通过当前 RunGate 后才能进入受约束 Run。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>Triage</b><br><span class="tiny muted">分诊</span></td><td>对导入候选做归属判定与风险分级的唯一人工处理入口：确认归属、转人工、隔离。</td><td class="mono">§1.2</td></tr>
+          <tr><td><b>生成溯源</b></td><td>候选"由哪次生成产生"的四元组：抽取 prompt 版本与生效范围、来源消息区间、抽取模型与参数指纹、生成日志指针。任一缺失即 <b>溯源缺失</b>：计入置信度争议，不得仅凭置信度自动落位。</td><td class="mono">§5.12</td></tr>
+          <tr><td><b>机器合并建议</b></td><td><span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由。只是决策输入，<b>不自我裁决</b>，落位仍需人工确认。</td><td class="mono">§5.12</td></tr>
+          <tr><td><b>superseded_by</b></td><td>新旧记忆的取代关系表达：指向被取代条目及其原因与替代者；是关系不是状态，更不是删除。</td><td class="mono">§5.7</td></tr>
           <tr><td><b>Review / Publish</b></td><td>内容审核与发布两个独立步骤。<b>approved ≠ published。</b></td><td class="mono">§2.5</td></tr>
           <tr><td><b>Projection</b><br><span class="tiny muted">投影</span></td><td>按接收者授权裁剪字段后的视图。必须先授权投影，再渲染输出。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>Delivery Intent</b></td><td>一次投递的意图记录（接收者、渠道、版本、有效期），与渠道实际 Attempt 分开记录。</td><td class="mono">§5.16</td></tr>

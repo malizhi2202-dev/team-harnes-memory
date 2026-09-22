@@ -37,9 +37,31 @@
 - **done**: 单文件离线可打开；三处矩阵无矛盾；侧栏 20 项在桌面端不被裁切。**人工浏览器 UAT 待执行**（见 `VALIDATION.md` §7）。
 - **note**: `product-prototype.html`（T-02 产物）保留未删，由本文档取代。
 
+## T-05 · v0.3 增量机械验证与 VALIDATION 登记（🤖 auto=true，专家团 3/3）
+
+- **auto**: true <!-- 专家团投票 T-05 🤖 3/3（研发负责人/测试/安全），边界清晰、verify 可机判、无破坏性 -->
+
+- **read_files**: `PRODUCT-DESIGN.html`、`_build/sec*.html`、`_build/proto*.html`、`_build/check.sh`、`_build/render-verify.js`、`REQUIREMENT.md`（AC-9~12）、`_research/FUSION-DECISIONS.md`（只读）
+- **write_files**: `VALIDATION.md`
+- **action**: 执行 AC-9~12 的可机判验证并把命令与结果登记进 `VALIDATION.md` 新增「v0.3 增量验证」节：①重建+`check.sh` 全绿留档；②AC-9/10/11 关键语义 grep（生成溯源 / 不自我裁决 / invalidated ≠ deleted / superseded_by / approved ≠ published 面板行存在，且无"自动应用"类绕过文案）；③AC-12 基准纪律 grep（LoCoMo/LongMemEval/BEAM/DMR 仅作类目名出现、不伴随任何分数）；④`node _build/render-verify.js`（playwright 可用则记录结果，不可用如实标「渲染验证待人审补做」）。不虚构人工 UAT 结论。
+- **verify**: `bash -c 'cd .specs/enterprise-agent-memory-product && bash _build/build.sh && bash _build/check.sh && grep -c "生成溯源" PRODUCT-DESIGN.html && grep -c "不自我裁决" PRODUCT-DESIGN.html && grep -c "invalidated ≠ deleted" PRODUCT-DESIGN.html && grep -c "superseded_by" PRODUCT-DESIGN.html && ! grep -E "(LoCoMo|LongMemEval|BEAM|DMR)[^。]{0,40}[0-9]+\.[0-9]" PRODUCT-DESIGN.html'`
+- **done**: AC-9~12 各有至少一条机判验证记录；不可机判部分（视觉走查、渲染）显式标「待人工」，对应 `UAT-09~12`。
+- **depends_on**: T-04（实现已随 v0.3 文档过审完成）
+
+## T-06 · v0.3 收口状态与留档（🤖 auto=true，专家团 3/3）
+
+- **auto**: true <!-- 专家团投票 T-06 🤖 3/3，纯状态行/留档登记，可回退 -->
+
+- **read_files**: `STATE.md`、`.specs/CHANGELOG.md`、`REQUIREMENT.md`（v2 节）
+- **write_files**: `STATE.md`、`.specs/CHANGELOG.md`
+- **action**: ①STATE.md 追加「已留档议题」行：C1 双时间轴 Schema、C2 删除可逆窗口、C3 双速写入（R18.4，指向 PRODUCT-DESIGN §10.2 与 FUSION-DECISIONS，供后续 D-discovery/架构 change 消化）+ 需求门投票结果一行；②CHANGELOG.md 的 v0.3 行补「AC-9~12 已抽取、需求门 4/4 通过」增量（若已含则只补投票句，不重复成段）。
+- **verify**: `git diff --check && grep -c "已留档议题" STATE.md && grep -c "需求门" STATE.md`
+- **done**: 留档行与投票记录落盘；不新增 backlog/parking-lot 概念。
+- **depends_on**: T-05
+
 ## 依赖顺序
 
-`T-01 → T-02 → T-03 → T-04`
+`T-01 → T-02 → T-03 → T-04 → T-05 → T-06`（v0.3 增量全串行，无并行候选：同一验证链条互为依据）
 
 ## 不执行
 

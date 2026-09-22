@@ -396,8 +396,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
   <span class="sep">/</span>
   <h1>Enterprise Agent Memory Platform · 产品设计文档 &amp; 界面原型</h1>
   <div class="tools">
-    <span class="chip mono">v0.3 · 2026-09-22</span>
-    <span class="chip ok">状态: 已过审（v0.3 · 2026-09-22 18:56 · 人审原话「通过」）</span>
+    <span class="chip mono">v0.3.1 · 2026-09-22</span>
+    <span class="chip ok">v0.3 已过审（18:56 人审「通过」）· v0.3.1 已过审（21:01 人审「通过」）</span>
     <span class="chip warn">原型内所有数据均为演示假数据</span>
     <button class="btn sm theme-btn" id="theme-toggle" type="button" aria-live="polite"><svg class="icon" style="width:13px;height:13px"><use href="#i-refresh"/></svg><span id="theme-label">暗色</span></button>
     <button class="btn sm" onclick="window.print()">打印 / 存 PDF</button>
@@ -495,7 +495,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <table class="tbl compact">
       <thead><tr><th>项</th><th>值</th></tr></thead>
       <tbody>
-        <tr><td>文档版本</td><td class="mono">v0.3 · 2026-09-22 · 状态: 已过审（2026-09-22 18:56 · 人审原话「通过」）</td></tr>
+        <tr><td>文档版本</td><td class="mono">v0.3.1 · 2026-09-22 · v0.3 已过审（18:56 · 人审原话「通过」）；v0.3.1 增补（溯源缺失：§5.12 规则 / §6.6 tri-517 / §8 术语）已过审（21:01 · 人审原话「通过」）</td></tr>
         <tr><td>change-id</td><td class="mono">enterprise-agent-memory-product</td></tr>
         <tr><td>上游事实源</td><td class="mono">.specs/enterprise-agent-memory-platform/（权威议题 01–10）</td></tr>
         <tr><td>竞品调研事实源</td><td class="mono">.specs/enterprise-agent-memory-product/_research/（LOCAL-FACTS + RECON ×4 · 2026-09-22 联网核验 · 调研稿未过审）</td></tr>
@@ -2063,7 +2063,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <li>读候选归属与理由：信号分解包括 <span class="mono">explicit_user_selection / work_thread_owner / project_or_team_context / resource_path_and_revision / producer_identity / connector_metadata / participant_membership / recent_activity / content_semantics / historical_assignment</span>；置信度以「依据充分 / 有限 / 存在争议 / 尚未确认」表达，不显示虚假精确百分比。</li>
       <li>读候选目标与写权限：确认目标 MemorySpace 的写策略与 ACL，并验证 <span class="mono">target_scope ⊆ effective_scope</span>；目标空间管理员不能绕过来源 ACL。</li>
       <li>读脱敏预览、敏感性与来源血缘：确认脱敏版本与来源 revision；脱敏不扩大授权。</li>
-      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。</li>
+      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。四要素任一缺失时，候选显示<b>「溯源缺失」</b>并计入置信度争议：不得仅凭置信度自动落位，补齐溯源或人工豁免并附理由后方可继续。</li>
       <li>做决策：自动落位 / 自动暂存候选 / 人工确认（治理队列）/ 隔离；跨边界、敏感或存在冲突的场景必须请求有权主体确认（来源 Owner 同意 + 目标接受）。</li>
       <li>写决策记录：<span class="mono">candidate_scopes / selected_scope / signal_refs / decision_reason / policy_version / model_or_rule_version / confidence / decided_at / reviewer</span>。</li>
     </ol>
@@ -3007,9 +3007,20 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
                 <td class="mono tiny">ms-user-lin（窄边界）· 不得回退到 Team</td>
                 <td class="tiny">设备标识 → dev-***；人名 → 已移除</td>
               </tr>
+              <tr>
+                <td class="mono">tri-517</td>
+                <td class="mono tiny">p-db（归属单一，无争议）</td>
+                <td class="tiny">来自旧批量导入脚本：抽取 prompt 版本 <span class="mono">unknown</span>、模型指纹仅台账占位；归属明确但生成溯源不全</td>
+                <td class="mono tiny">0.66（mid）</td>
+                <td class="mono">diagnose</td>
+                <td>内部信息</td>
+                <td class="mono tiny">imp-81 › msg 12–40 › 生成日志指针缺失</td>
+                <td class="mono tiny">ms-proj-db（须先补溯源或人工豁免）</td>
+                <td class="tiny">无个人标识；保留原值</td>
+              </tr>
             </tbody>
           </table>
-          <p class="tiny muted">队列只显示当前主体有权发现的候选；无权项不返回名称、路径与数量。两项均为 <span class="mono">ownership_pending</span>，等待人工确认，不进入任何空间的正式写入。</p>
+          <p class="tiny muted">队列只显示当前主体有权发现的候选；无权项不返回名称、路径与数量。tri-512 / tri-513 为 <span class="mono">ownership_pending</span>，等待人工确认，不进入任何空间的正式写入；tri-517 归属明确，但生成溯源四要素缺二，显示 <span class="chip warn">溯源缺失</span> 并计入置信度争议——补齐溯源或人工豁免附理由前，即使置信度 0.66 也不得落位。</p>
           <div class="split">
             <div class="panel">
               <p class="panel-title">tri-512 · 归属信号与裁决依据</p>
@@ -4261,6 +4272,9 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
           <tr><td><b>RunGate</b></td><td>高风险工具副作用的动态执行准入，执行过程中持续重检。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>ActionProposal</b></td><td>默认不可执行的动作建议；通过当前 RunGate 后才能进入受约束 Run。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>Triage</b><br><span class="tiny muted">分诊</span></td><td>对导入候选做归属判定与风险分级的唯一人工处理入口：确认归属、转人工、隔离。</td><td class="mono">§1.2</td></tr>
+          <tr><td><b>生成溯源</b></td><td>候选"由哪次生成产生"的四元组：抽取 prompt 版本与生效范围、来源消息区间、抽取模型与参数指纹、生成日志指针。任一缺失即 <b>溯源缺失</b>：计入置信度争议，不得仅凭置信度自动落位。</td><td class="mono">§5.12</td></tr>
+          <tr><td><b>机器合并建议</b></td><td><span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由。只是决策输入，<b>不自我裁决</b>，落位仍需人工确认。</td><td class="mono">§5.12</td></tr>
+          <tr><td><b>superseded_by</b></td><td>新旧记忆的取代关系表达：指向被取代条目及其原因与替代者；是关系不是状态，更不是删除。</td><td class="mono">§5.7</td></tr>
           <tr><td><b>Review / Publish</b></td><td>内容审核与发布两个独立步骤。<b>approved ≠ published。</b></td><td class="mono">§2.5</td></tr>
           <tr><td><b>Projection</b><br><span class="tiny muted">投影</span></td><td>按接收者授权裁剪字段后的视图。必须先授权投影，再渲染输出。</td><td class="mono">§2.4</td></tr>
           <tr><td><b>Delivery Intent</b></td><td>一次投递的意图记录（接收者、渠道、版本、有效期），与渠道实际 Attempt 分开记录。</td><td class="mono">§5.16</td></tr>
@@ -4455,7 +4469,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
   </section>
 
   <footer class="doc-foot">
-    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.3 · 2026-09-22 · change-id <span class="mono">enterprise-agent-memory-product</span> · 状态: 已过审（2026-09-22 18:56 人审「通过」）</p>
+    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.3.1 · 2026-09-22 · change-id <span class="mono">enterprise-agent-memory-product</span> · 状态: 已过审（v0.3 · 18:56「通过」；v0.3.1 · 21:01「通过」）</p>
     <p class="small" style="margin:0">本文件为单文件离线文档，零外部依赖。第 6 章全部界面为只读静态原型，数据均为虚构演示数据，不连接后端、不产生真实副作用。涉及 Schema、阈值、算法、SLA、责任矩阵、供应商合同与法域模板的内容均标注为待确认或暂缓，不构成法律、合规或工程实现结论。</p>
   </footer>
 

@@ -251,9 +251,20 @@
                 <td class="mono tiny">ms-user-lin（窄边界）· 不得回退到 Team</td>
                 <td class="tiny">设备标识 → dev-***；人名 → 已移除</td>
               </tr>
+              <tr>
+                <td class="mono">tri-517</td>
+                <td class="mono tiny">p-db（归属单一，无争议）</td>
+                <td class="tiny">来自旧批量导入脚本：抽取 prompt 版本 <span class="mono">unknown</span>、模型指纹仅台账占位；归属明确但生成溯源不全</td>
+                <td class="mono tiny">0.66（mid）</td>
+                <td class="mono">diagnose</td>
+                <td>内部信息</td>
+                <td class="mono tiny">imp-81 › msg 12–40 › 生成日志指针缺失</td>
+                <td class="mono tiny">ms-proj-db（须先补溯源或人工豁免）</td>
+                <td class="tiny">无个人标识；保留原值</td>
+              </tr>
             </tbody>
           </table>
-          <p class="tiny muted">队列只显示当前主体有权发现的候选；无权项不返回名称、路径与数量。两项均为 <span class="mono">ownership_pending</span>，等待人工确认，不进入任何空间的正式写入。</p>
+          <p class="tiny muted">队列只显示当前主体有权发现的候选；无权项不返回名称、路径与数量。tri-512 / tri-513 为 <span class="mono">ownership_pending</span>，等待人工确认，不进入任何空间的正式写入；tri-517 归属明确，但生成溯源四要素缺二，显示 <span class="chip warn">溯源缺失</span> 并计入置信度争议——补齐溯源或人工豁免附理由前，即使置信度 0.66 也不得落位。</p>
           <div class="split">
             <div class="panel">
               <p class="panel-title">tri-512 · 归属信号与裁决依据</p>
