@@ -396,7 +396,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
   <span class="sep">/</span>
   <h1>Enterprise Agent Memory Platform · 产品设计文档 &amp; 界面原型</h1>
   <div class="tools">
-    <span class="chip mono">v0.2 · 2026-09-21</span>
+    <span class="chip mono">v0.3 · 2026-09-22</span>
+    <span class="chip ok">状态: 已过审（v0.3 · 2026-09-22 18:56 · 人审原话「通过」）</span>
     <span class="chip warn">原型内所有数据均为演示假数据</span>
     <button class="btn sm theme-btn" id="theme-toggle" type="button" aria-live="polite"><svg class="icon" style="width:13px;height:13px"><use href="#i-refresh"/></svg><span id="theme-label">暗色</span></button>
     <button class="btn sm" onclick="window.print()">打印 / 存 PDF</button>
@@ -409,6 +410,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <a href="#s0">0 · 这份文档怎么读</a>
     <p class="grp">产品</p>
     <a href="#s1">1 · 产品全景</a>
+    <a href="#s1-5">1.5 竞品格局与差异位</a>
     <p class="grp">核心概念</p>
     <a href="#s2-1">2.1 五个不能混淆的维度</a>
     <a href="#s2-2">2.2 组织与工作对象</a>
@@ -493,9 +495,10 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <table class="tbl compact">
       <thead><tr><th>项</th><th>值</th></tr></thead>
       <tbody>
-        <tr><td>文档版本</td><td class="mono">v0.2 · 2026-09-21</td></tr>
+        <tr><td>文档版本</td><td class="mono">v0.3 · 2026-09-22 · 状态: 已过审（2026-09-22 18:56 · 人审原话「通过」）</td></tr>
         <tr><td>change-id</td><td class="mono">enterprise-agent-memory-product</td></tr>
         <tr><td>上游事实源</td><td class="mono">.specs/enterprise-agent-memory-platform/（权威议题 01–10）</td></tr>
+        <tr><td>竞品调研事实源</td><td class="mono">.specs/enterprise-agent-memory-product/_research/（LOCAL-FACTS + RECON ×4 · 2026-09-22 联网核验 · 调研稿未过审）</td></tr>
         <tr><td>本 change 文档</td><td class="mono">REQUIREMENT.md · DESIGN.md · CONCEPTS.md · ARCHITECTURE.md · UI-DESIGN.md</td></tr>
         <tr><td>对象与权限参照</td><td class="mono">.specs/final-v1/DOMAIN-MODEL.md · .specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</td></tr>
         <tr><td>视觉语汇来源</td><td class="mono">UI-DESIGN.md tokens（:root 与本文件同源）</td></tr>
@@ -605,6 +608,128 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
         <tr><td>不用单一绿色标签掩盖未知</td><td><span class="mono">unknown ≠ zero</span>；无法证明时显示「未知 + 范围 + 证据时间 + 下一门槛」。</td></tr>
       </tbody>
     </table>
+
+    <h3 id="s1-5">1.5 竞品格局与我们的差异位</h3>
+    <p class="lead">本节回答：市面上已经有什么、它们把什么做成了默认动作、本平台站在哪里。事实底座是 2026-09-22 的四份联网调研稿 <span class="mono">_research/RECON-*.md</span>（每条结论带来源与【源码已落地 / 文档声称 / 营销宣传】档位，未验证项如实标注）；本增量已于 2026-09-22 18:56 过人工审核门（用户原话「通过」）。</p>
+
+    <div class="callout">
+      <h5>先说结论</h5>
+      <p class="small">全行业把「把记忆记下来」卷成了成熟件（异步 LLM 抽取、原始层无损留底、软删失效、namespace 隔离、前后台双分工）；但<b>没有一家把「候选 → 人工审核 → 受控发布 → 可证明撤回 → 行动前准入」做成对象链路</b>——头部玩家甚至正在放弃写入期的自动裁决。本平台的差异位不是「抽取更准」，而是把记忆当作可审计、可撤回、可执行准入的治理对象。</p>
+    </div>
+
+    <div class="tbl-wrap">
+    <table class="tbl compact">
+      <thead><tr><th style="width:14%">系统（形态与规模）</th><th style="width:16%">记忆模型</th><th style="width:17%">写入与合并</th><th style="width:16%">失效与时间线</th><th style="width:19%">治理与审计</th><th>与本产品的关系</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>TencentDB Agent Memory</b><br><span class="tiny muted">开源 team-level 记忆枢纽 · ≈27k 星 · 本设计内核现状宿主</span></td>
+          <td>四资产（Chat Memory L0–L3 / Skill / LLM-Wiki / Code-Graph）共用统一资产注册壳：版本、可见性、状态、置信度、过期、使用计数与内容体分离</td>
+          <td>反代与 API 捕获 → 异步批量抽取（每 N 轮 / 空闲触发）+ 向量去重；「模型可请求写入，空间落点服务端裁决」有真实对应物</td>
+          <td>资产壳有过期字段；清空内容可保留归属与绑定；但技能资产已改物理删除、无回收站</td>
+          <td>team/agent/user/task 隔离 + 三维 ACL（允许/拒绝）+ 生成日志反查 + 抽取 prompt 版本化；<b>无评审单对象、读路径无审计、「审核」停留文案</b></td>
+          <td>现状宿主：可吸收项（资产壳、装配强度分档、生成溯源、私有默认、清空保壳）中，生成溯源与合并建议已落 6.6，其余以候选记入 §10.2 与 <span class="mono">_research/FUSION-DECISIONS.md</span>；其治理缺口即本平台要补的范围（对照 1.3 能力地图）</td>
+        </tr>
+        <tr>
+          <td><b>mem0</b><br><span class="tiny muted">SDK/HTTP 记忆层 + 托管平台 · ≈66k 星</span></td>
+          <td>条目 + 实体链接；「记忆类型」三个枚举仅一个实现（文档自承）；真实分层是 user / agent / run 作用域键</td>
+          <td><b>招牌机制自我反转</b>：论文期的抽取期 ADD / UPDATE / DELETE / NOOP 四操作合并，2026-04 起改为单趟 ADD-only 只累积；矛盾并存，官方把冲突解决标 not planned，社区自建每周定时清理</td>
+          <td>过期=「隐藏不删除」、按 ID 仍可取、清日期即恢复；另有读侧时间推理排序缓解新旧并存</td>
+          <td>无候选态、无 Lineage（抽取用了哪些消息不落库）、无删除闭包；RBAC 仅组织/项目 × 两角色，防跨用户靠「记得传 user_id」口头建议；托管版有项目级事件日志与逐条修改历史，自托管没有</td>
+          <td>生产实锤反向印证审核门：逐条审 10,134 条自动记忆→<b>97.8% 是垃圾</b>；删除只删前 100 条却返回成功；部分嵌入失败静默丢写。「隐藏不删除 + 事件回执 + 真值与投影分面」三件可借鉴物已对照进 6.7 服务可见性与 §10.2（回滚窗口候选）</td>
+        </tr>
+        <tr>
+          <td><b>MemOS（记忆张量）</b><br><span class="tiny muted">「LLM 记忆操作系统」开源 + 云 · ≈11.5k 星</span></td>
+          <td>论文主张明文 / 激活 / 参数三形态 + MemCube 统一对象（元数据分描述/治理/行为三类）；现行 2.0 仓库以明文为主，激活与参数多为占位、文档标 Coming Soon</td>
+          <td>OS 隐喻调度：组织/整理插件<b>默认关闭、自承 beta</b>；快抽→精抽两段</td>
+          <td>代码侧有版本链、冲突归档与来源字段；失效时间线未成对外 API</td>
+          <td>论文治理叙事最全（权限三元组、审计日志、脱敏水印、Time Machine）；开源核心<b>无结构化审计日志组件</b>、无加密/脱敏；云版硬边界只有项目 API Key，项目内隔离靠调用方传字段；自报越权注入 issue（模式搜索缺归属过滤）</td>
+          <td>「记忆=一等系统资源」与本平台互证；其宣称-实现落差是本设计「待确认不冻结」纪律的反面教材。MemCube 元数据三分与 §2.3 的 MemoryItem 元数据同构，可作实现参照；其论文实验未覆盖治理面（未验证：35.24% token 节省无出处）</td>
+        </tr>
+        <tr>
+          <td><b>Zep / Graphiti</b><br><span class="tiny muted">时序知识图谱引擎 + 托管 · ≈31k 星</span></td>
+          <td>episode 无损留底 → 实体/fact 图（带类型边）→ 社区摘要；云端按 context types 预算装配</td>
+          <td>全自动六步 LLM 管线（抽取→日期标注→实体消解→fact 消解→摘要更新）；矛盾=旧边失效；「宁欠合并不过合并」；<b>无人工审核环节，抽取即生效</b></td>
+          <td><b>行业时间线天花板</b>：双时间轴四戳（何时为真 / 何时停止为真 × 系统何时得知 / 何时下架）、失效不删、支持时点查询；但失效不可逆、删 episode 后摘要不重算</td>
+          <td>SOC2 Type II / HIPAA / BYOK / BYOC；RBAC（人）+ABAC（机器）二分、episode metadata 投影到派生 fact 供过滤；级联删除有「无其他来源支持才删」判定；审计仅覆盖管理面且限企业档，数据面读取审计缺位</td>
+          <td>时间线、血缘投影、删除传播判定是本设计 Lineage/CopyInventory 的最强外部参照（6.7 时间线面板已采其语义做产品表达，Schema 留 §10.2）；行动授权官方明言留给客户——RunGate 补的正是这个洞</td>
+        </tr>
+        <tr>
+          <td><b>Letta（原 MemGPT）</b><br><span class="tiny muted">agent 服务器 · 2025-10 战略转向</span></td>
+          <td>旧 core/archival blocks 已遗留化；现行 MemFS＝<b>git 仓库化记忆</b>：常驻 system/ + 按需文件读</td>
+          <td>agent 在线自编辑（低摩擦）+ sleep-time 后台整理用 git worktree，<b>「整理者自审即应用，明示不要人批准」</b></td>
+          <td>git commit 文件级版本史；无现实有效/失效时间线</td>
+          <td>组织 RBAC、记忆默认私有；无公开合规面、无数据面审计、旧版覆写丢历史</td>
+          <td>双 agent 前写后理与「git=机械层 ChangeSet」可抄（对应 §1.5.2 缺口 3 的双速设计方向）；其自我审核恰好是我们人工发布门的对照面</td>
+        </tr>
+        <tr>
+          <td><b>AWS Bedrock AgentCore Memory</b><br><span class="tiny muted">云托管双层 · 2025-10 GA</span></td>
+          <td>Memory → Event（短留存 3–365 天）→ Record（长存）双层；三档策略（内置 / 覆盖 / 自管抽取）</td>
+          <td>异步抽取作业化 + 重驱动队列；整理三操作 Add/Update/Skip</td>
+          <td><b>record 就地改写、去重即物理删（有删除事件、无版本无时间线）</b>；回溯需客户沿导出流自建</td>
+          <td>治理基建最强宿主：namespace 条件键（缺键即 Deny）、Cedar FGAC、事件流可接客户审计；但批量写旁路 FGAC、数据面 CloudTrail 无文档、投毒防御外包客户</td>
+          <td>「控制面强、记忆语义薄」的双面样本；「条件键缺键即拒」与服务端裁决入参的 fail-closed 语义同构（本设计口径已在 §2.1/§2.5 成立，此为外部印证）</td>
+        </tr>
+        <tr>
+          <td><b>Google Agent Platform Memory Bank</b><br><span class="tiny muted">云托管 · 2025-12 GA（原 Vertex Memory Bank）</span></td>
+          <td>Memory → <b>不可变 MemoryRevision</b>（含合并前抽取中间产物、回滚、删除后 48h 恢复窗）；scope=≤5 对不可变 k-v 硬隔离</td>
+          <td>抽取→整理两阶段，LLM 判矛盾后 ADD/UPDATE/DELETE <b>覆盖式直接落库、无解释输出</b>；接受人工预筛条目但不构成审核门</td>
+          <td>版本史而非时间线：无 valid/invalid；「静默不生成」被官方定义为成功语义</td>
+          <td>专用 IAM 角色 + CEL 按 scope 条件授权（但批量清单与清除不吃条件=穿透风险）；regional CMEK / VPC-SC；方法级数据审计粒度未验证</td>
+          <td>revision 数据形状与 scope-IAM 是 Lineage/MemorySpace 的最接近外部形态（候选参照，Schema 不冻结，§10.2）；「删除可回滚窗口仅 48h」把闭包义务转嫁回客户，正是 CopyInventory 的叙事反证</td>
+        </tr>
+        <tr>
+          <td><b>其他与 C 端参照</b><br><span class="tiny muted">速览组</span></td>
+          <td>ChatGPT：保存记忆+摘要双态、Project 级隔离；Claude memory tool：模型自管 /memories 文件；supermemory / Memobase / LangMem / Cognee / A-MEM / HippoRAG 2 各占算法或画像生态位；OpenViking 等新玩家走文件分层隐喻；笔记服务 memos（63k 星）经澄清<b>不是 agent 记忆系统</b>（无抽取/分层/血缘/遗忘验证），仅可作证据源前端</td>
+          <td>共性：自动抽取、软删或改写并存；ChatGPT 删除按约 30 天窗口传播且分层不联动</td>
+          <td>普遍无时点查询；supermemory 有 isLatest 软删干跑</td>
+          <td>合规三件套（SOC2+BYOK+删除 API）成为云厂商与托管标配；数据面读取审计普遍缺位</td>
+          <td>「删除闭包与副本传播」连头部消费产品都未解决——CopyInventory 痛点普适的直接证据</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="tiny muted">来源档位：本表全部结论出自 <span class="mono">_research/</span> 调研稿（联网直抓 2026-09-22，含各仓库源码/文档/issue 链接），星数与版本号为当日快照；「未验证」项保留在调研稿、未写入本表结论句。</p>
+
+    <h4 id="s1-5b">1.5.1 行业趋同（默认动作，新进入者的门票）</h4>
+    <ol>
+      <li><b>抽取全异步、LLM 为核</b>：没有一家敢在线同步写全量记忆，「写入后延迟可见」是共同契约——本设计的 Import→Triage 链路与之一致；差异在链路终点接人工门。</li>
+      <li><b>原始层无损留底</b>：episode / event / L0 原文永久或按 TTL 保留，派生物只从原文生长——对应 §2.6 不变量⑤「新副本新 revision」。</li>
+      <li><b>失效趋软删/累加，但覆盖式仍存</b>：失效不删（Zep）、隐藏不删（mem0）、累加（mem0 v3）与就地改写+去重即删（AWS/Google）两代方案并存——本设计一律 invalidated/superseded 不物删，删除必须走 §4.6 证明链。</li>
+      <li><b>namespace/scope 是隔离原语但全是字符串约定</b>，无平台级 schema 治理——MemorySpace 的 owner 四类型 + 写策略枚举（§2.2/§2.4）是对该空位的第一次结构化回答。</li>
+      <li><b>双 agent 分工</b>：前台轻写、后台专职整理（Letta 首倡，各家以批处理变体重现）——本设计的自动分级 M0/M1/M2 + 巩固走 ChangeSet，等于给后台整理补上门。</li>
+      <li><b>文件/git 隐喻回归</b>（MemFS、虚拟文件树、/memories）对抗向量黑箱；但全部只做<b>版本史</b>，无人做到现实时间线+权限治理同时成立。</li>
+      <li><b>合规=SOC2+BYOK+删除 API 三件套</b>，且审计普遍只覆盖管理面——§2.4 数据面审计与 §4.6 副本闭包是超出门票的部分。</li>
+    </ol>
+
+    <h4 id="s1-5c">1.5.2 相对独有（调研范围内未见对应物）与相对缺口</h4>
+    <div class="split">
+      <div class="card pad-lg">
+        <p class="panel-title">独有卖点（截至 2026-09-22 调研零命中）</p>
+        <ol>
+          <li><b>人工发布门</b> Triage→ChangeSet→Review→Publish：无一家有版本化、可回滚的审核对象（Google 最接近也只是喂入预筛条目）。</li>
+          <li><b>RunGate 行动准入</b>：无人把「记忆影响行动」当治理对象；Zep 官方明言行动授权留给客户。</li>
+          <li><b>CopyInventory 副本闭包</b>：在线/缓存/索引/Embedding/Manifest/备份/Provider/终端的全链路撤回清单无人做；mem0「删 100 报成功」与 ChatGPT 30 天窗口证明痛点。</li>
+          <li><b>Purpose × ACL 双维</b>：竞品 ACL 只答「谁能看」，不答「为何用」。</li>
+          <li><b>跨 Harness 中立 + 工作现场连续性</b>：各竞品绑自家云或自家 harness；Work Thread / ContextManifest 交接无第二家。</li>
+        </ol>
+      </div>
+      <div class="card pad-lg">
+        <p class="panel-title">相对缺口（诚实清单；竞品已做而本设计未承诺）</p>
+        <ol>
+          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip warn">待确认</span></li>
+          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip warn">待确认（候选：MemoryItem 增现实有效区间 + superseded_by 关系化，§10.2）</span></li>
+          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip warn">待确认（§10.2）</span></li>
+          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。</li>
+          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。</li>
+          <li><b>成本与时延透明</b>：审核门+重算+闭包的成本结构未讲清，采购对比吃亏点。<span class="chip warn">待确认（§10.1 已标暂缓）</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <h5>本节的引用纪律</h5>
+      <p class="small">竞品基准分数（LoCoMo / LongMemEval / BEAM 等）一律<b>不进入本文档正文</b>：各家自报且 managed 与 OSS 混称、Zep 与 mem0 的方法论争议至今未决（详见 <span class="mono">_research/RECON-mem0.md §8.2</span>）。引用竞品事实保留三档标注【源码已落地 / 文档声称 / 营销宣传】；「行业零命中」结论附带日期与检索范围，竞品一旦补齐即失效——更新约定见 §10.5。</p>
+    </div>
   </section>
   <!-- ============================ §2 ============================ -->
   <section class="doc-sec" id="s2">
@@ -1816,6 +1941,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <ol>
       <li>选择 MemorySpace：<span class="mono">ms-proj-db</span>（project/p-db）、<span class="mono">ms-team-pay</span>（team/team-pay）、<span class="mono">ms-user-lin</span>（user）、<span class="mono">ms-agent-retriever</span>（agent）；长期 owner 只有这四类，平台不提供 public Memory。</li>
       <li>打开单条记忆（如 <span class="mono">m-9031</span> L1 原子「DB-Proxy 连接池上限 200」、<span class="mono">m-9044</span> L2 场景、<span class="mono">m-9102</span> L3 事实）：查看层级、<span class="mono">canonical_owner_scope</span>、来源与 revision、Purpose、敏感性、生命周期与可见范围。</li>
+      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（双时间轴为候选实现语义，见 §10.2）。</li>
       <li>读来源与版本：真源是规范对象与不可变 revision；Index、Projection、Snapshot 都是绑定 revision 的派生物（<span class="mono">Index ≠ Canonical Truth</span>）。</li>
       <li>纠错：提交 correction 或 transfer；纠正以追加 <span class="mono">correction_record</span> 的方式展示历史链，不覆盖原归属事实；只有显式 Transfer 才改变 owner。</li>
       <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。</li>
@@ -1937,6 +2063,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <li>读候选归属与理由：信号分解包括 <span class="mono">explicit_user_selection / work_thread_owner / project_or_team_context / resource_path_and_revision / producer_identity / connector_metadata / participant_membership / recent_activity / content_semantics / historical_assignment</span>；置信度以「依据充分 / 有限 / 存在争议 / 尚未确认」表达，不显示虚假精确百分比。</li>
       <li>读候选目标与写权限：确认目标 MemorySpace 的写策略与 ACL，并验证 <span class="mono">target_scope ⊆ effective_scope</span>；目标空间管理员不能绕过来源 ACL。</li>
       <li>读脱敏预览、敏感性与来源血缘：确认脱敏版本与来源 revision；脱敏不扩大授权。</li>
+      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。</li>
       <li>做决策：自动落位 / 自动暂存候选 / 人工确认（治理队列）/ 隔离；跨边界、敏感或存在冲突的场景必须请求有权主体确认（来源 Owner 同意 + 目标接受）。</li>
       <li>写决策记录：<span class="mono">candidate_scopes / selected_scope / signal_refs / decision_reason / policy_version / model_or_rule_version / confidence / decided_at / reviewer</span>。</li>
     </ol>
@@ -2909,6 +3036,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
                 <dt>可逆性</dt><dd>高（尚未写入任何空间，可直接驳回）</dd>
                 <dt>执行影响</dt><dd>无（本项不含 Action Proposal）</dd>
                 <dt>目标权限约束</dt><dd class="mono tiny">target_scope ⊆ source_allowed_scope · target_purpose ⊆ source_allowed_purpose</dd>
+                <dt>生成溯源</dt><dd class="mono tiny">抽取 prompt p-2026.09.2（对 team-pay 生效，版本可反查）· 来源消息 msg 118–142 · 抽取模型与参数指纹 sha256:3e7c1d · 生成日志 gl-6621</dd>
+                <dt>机器合并建议（仅参考，不自我裁决）</dt><dd class="tiny">与既有记忆比对后给出候选建议 <span class="mono">ADD · UPDATE · SUPERSEDE(m-8807) · NOOP</span> 与逐条理由；建议只是输入，任何落位仍需人工确认生成 ChangeSet（外部教训：写入期自动裁决既做不好也被放弃，见 §1.5）</dd>
                 <dt>复核人 / 截止</dt><dd class="mono">knowledge-owner · 2026-09-23 18:00</dd>
                 <dt>下一门槛</dt><dd>人工确认归属 → ChangeSet <span class="mono">cs-4410</span> Review → Publish（approved ≠ published）</dd>
               </dl>
@@ -3045,6 +3174,18 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
                 </tbody>
               </table>
               <p class="tiny muted">派生对象与历史版本都纳入血缘与撤回传播：来源撤回 → 派生资产暂停或撤回 → 索引 / 缓存 / Manifest 失效 → 受影响 Run 阻断或重新解析 → 旧 Snapshot 只保留审计。</p>
+            </div>
+            <div class="panel">
+              <p class="panel-title">时间线与失效（双时间轴视图 · 含已下架历史条目）</p>
+              <table class="tbl compact">
+                <thead><tr><th>记忆</th><th>现实时间线（何时为真 / 何时停止为真）</th><th>系统时间线（何时得知 / 何时下架）</th><th>失效形态</th><th>服务可见性</th></tr></thead>
+                <tbody>
+                  <tr><td class="mono">m-9031</td><td class="mono tiny">valid_from 2026-08-14 · 至今为真</td><td class="mono tiny">created 2026-09-02 14:32 · 未下架</td><td><span class="chip ok">current</span></td><td class="tiny">检索、装配、召回均正常</td></tr>
+                  <tr><td class="mono">m-8807</td><td class="mono tiny">valid_from 2026-03-02 · valid_to 2026-08-13（连接池上限 180 → 200 变更后不再为真）</td><td class="mono tiny">created 2026-03-05 · invalidated 2026-08-14（由 m-9031 经 superseded_by 取代）</td><td><span class="chip warn">invalidated ≠ deleted</span></td><td class="tiny">默认退出召回与 Manifest；按 ID 审计读取仍可（retained ≠ service-visible，见 6.10）</td></tr>
+                  <tr><td class="mono">m-9102</td><td class="mono tiny">未生效（仅审核通过）</td><td class="mono tiny">approved 2026-09-21 14:32 · published 待发布构建</td><td><span class="chip">approved ≠ published</span></td><td class="tiny">发布成功后才可被召回；审批绑定的是该不可变版本</td></tr>
+                </tbody>
+              </table>
+              <p class="tiny muted">「现实时间线 × 系统时间线」双轨口径为候选实现语义（对标行业成熟形态，见 §1.5 与 §10.2，未冻结 Schema）。本屏先固化产品语义：<b>失效走标记与传播，不走物理删除</b>；「下架」「删除证明」「审计保留」是三种不同事实，分别记录、互不折算。</p>
             </div>
           </div>
         </div>
@@ -4173,6 +4314,12 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
 
     <h3 id="s9-11b">Q12 · 我的对话内容会被自动送到外部 Provider 吗？</h3>
     <p>不会自动发生。跨边界复用和导出都是受授权动作：需要 Purpose、目标 ACL、敏感性判定、脱敏与审批，高风险动作默认阻断。一旦确实发生外部处理，该 Provider 副本会进入 CopyInventory 作为独立副本面管理，并有范围绑定证明、审计权和撤回后的对账要求。凭据与密钥只保存引用和状态，任何页面都不回显明文。</p>
+
+    <h3 id="s9-13">Q13 · 这不就是更重的 mem0 / Zep / TencentDB Agent Memory 吗？</h3>
+    <p>2026-09 的竞品调研给出相反回答：<b>没有一家把「候选 → 人工审核 → 受控发布」做成版本化的对象链路</b>——TencentDB Agent Memory 的「审核」停留在文案与角色枚举、无评审单对象；Zep 全自动写图、错误只能事后删改；Letta 的后台整理明示「整理者自审即应用、不要人批准」；mem0 甚至撤掉了招牌的写入期 LLM 裁决改为只累加，并公开挂着「逐条审 10,134 条自动记忆 97.8% 是垃圾」「删除只删前 100 条却返回成功」的 issue。它们解决「记得住、查得到」，本平台解决「说得清来源、给得出证明、管得住行动」——重叠在数据面，差异在控制面。逐家对照与证据出处见 <a href="#s1-5">§1.5</a> 与 <span class="mono">_research/</span> 调研稿。</p>
+
+    <h3 id="s9-14">Q14 · 为什么不引用各家公布的基准分数来证明记忆质量？</h3>
+    <p>因为不可复核：竞品分数为厂商自报，托管版与开源版混称（mem0 已公开承认其分数来自含专有优化的托管平台，且与 Zep 的评测方法学争议至今未收敛），本方议题层也已裁决「先建自有评测基线（recall@k / MRR / NDCG + golden set），再谈任何召回结论」。本文档因此只承诺<b>可核验的治理语义</b>（有没有候选态、审核门、删除闭包、数据面审计——这些能从接口面与源码核验），基准对比一律留在 <span class="mono">_research/</span> 调研稿并按「厂商自报」标注。引用纪律见 <a href="#s1-5">§1.5</a> 末条。</p>
   </section>
   <!-- ============================ §10 ============================ -->
   <section class="doc-sec" id="s10">
@@ -4235,7 +4382,25 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
             <td>最终 Schema / 阈值 / SLA</td>
             <td>议题讨论给出了语义方向</td>
             <td>缺少真实拓扑、责任人与法务决定</td>
-            <td><span class="chip">暂缓</span> 不冻结，见 §10.1 说明</td>
+            <td><span class="chip warn">待确认</span> 不冻结，见 §10.1 说明</td>
+          </tr>
+          <tr>
+            <td>现实时间线（双时间轴）</td>
+            <td>竞品调研：Zep 的「何时为真 / 何时停止为真 × 系统何时得知 / 何时下架」四戳与时点查询是行业最成熟形态；6.7 已用该语义做产品表达</td>
+            <td>本文档生命周期目前只表达「当前态」；议题层已否决第一版建完整图库，双时间轴是字段语义、不是图库，两者不冲突但 Schema 未冻结</td>
+            <td><span class="chip warn">待确认</span> 作为 MemoryItem / Lineage 的候选实现语义，由架构 change 裁决（见 §1.5.2 缺口 2）</td>
+          </tr>
+          <tr>
+            <td>删除的可逆窗口</td>
+            <td>竞品调研：Google 给删除后 48 小时恢复窗、mem0 过期=隐藏不删、ChatGPT 删除约 30 天传播——行业把「删除可逆」做成了限时产品参数</td>
+            <td>本设计口径「失效快、恢复迟」，不承诺统一恢复窗；恢复动作本身是新的受授权动作（不变量⑧）</td>
+            <td><span class="chip warn">待确认</span> 恢复窗口是否作为保留策略的显式参数，与 §10.1 Copy 行一并裁决</td>
+          </tr>
+          <tr>
+            <td>检索内核与在线写摩擦</td>
+            <td>竞品调研：混合多路 + rerank + 预算装配与「当场记住」的低摩擦在线写是竞品标配（其时延数字均为厂商自报）</td>
+            <td>本文档只定义 ContextManifest 契约与审核链路，不承诺内核指标；纯审核流对体验的代价如实列在 §1.5.2</td>
+            <td><span class="chip warn">待确认</span> 双速写入（个人空间直写 + 团队空间审核）进入 REQUIREMENT 裁决；检索内核归实现 change</td>
           </tr>
         </tbody>
       </table>
@@ -4272,6 +4437,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
         <tr><td class="mono">.specs/enterprise-agent-memory-platform/01–10-*.md</td><td>十项权威议题的完整讨论与阶段性结论</td></tr>
         <tr><td class="mono">.specs/final-v1/DOMAIN-MODEL.md</td><td>对象、关系、归属与权限推导（只读参考）</td></tr>
         <tr><td class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</td><td>信息架构收敛稿（只读参考）</td></tr>
+        <tr><td class="mono">.specs/enterprise-agent-memory-product/_research/</td><td>2026-09-22 竞品调研事实层：<span class="mono">LOCAL-FACTS.md</span>（本地文档蒸馏与增量问题清单）+ <span class="mono">RECON-tencentdb-agent-memory.md · RECON-mem0.md · RECON-memos-memos.md · RECON-others.md</span>（含 Zep/Letta/AWS/Google 深查与 12 家速览）+ <span class="mono">FUSION-DECISIONS.md</span>（融合裁决表）。每条结论带来源与证据档位；随 §1.5 于 2026-09-22 18:56 过人工审核门（原话「通过」），其中标注「未验证」的内容仍不得作为下游决策依据</td></tr>
+        <tr><td class="mono">.specs/memory-platform-comparison-v2.md · .specs/intent-os-mindmemos-adoption.md</td><td>上一轮 Agent OS / MindMemOS 深调研与复核（含证伪与「禁止复活」清单）——§1.5 不重复其结论，被证伪的公式与参数不得回流本文档</td></tr>
       </tbody>
     </table>
 
@@ -4282,12 +4449,13 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <li><b>§5 与 §6 联动。</b>新增或调整模块时，使用指南与界面原型必须一起改；§5.0 与 §7 的角色可见性必须同时更新。</li>
       <li><b>不冻结未决实现。</b>涉及 Schema、阈值、算法、SLA、责任矩阵、合同与法域模板的内容，一律保留「待确认 / 暂缓」标记，直到有真实输入。</li>
       <li><b>禁止宣称为最终结论。</b>本文档是产品设计文档，不是法律、合规或工程实现结论。</li>
+      <li><b>竞品结论时效约定（v0.3 新增）。</b>§1.5 的「行业零命中」「唯一对应物」等结论全部基于 2026-09-22 调研证据快照；引用竞品事实保留【源码已落地 / 文档声称 / 营销宣传】档位；竞品一旦新增审核门、数据面审计或行动准入，§1.5 对照行与 §1.5.2 卖点清单必须同步降级修订，禁止凭旧结论续用。上一轮调研（comparison-v2 / adoption 复核）中被证伪的公式与参数，不得以任何形式回流本文档。</li>
     </ul>
   </section>
   </section>
 
   <footer class="doc-foot">
-    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.2 · 2026-09-21 · change-id <span class="mono">enterprise-agent-memory-product</span></p>
+    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.3 · 2026-09-22 · change-id <span class="mono">enterprise-agent-memory-product</span> · 状态: 已过审（2026-09-22 18:56 人审「通过」）</p>
     <p class="small" style="margin:0">本文件为单文件离线文档，零外部依赖。第 6 章全部界面为只读静态原型，数据均为虚构演示数据，不连接后端、不产生真实副作用。涉及 Schema、阈值、算法、SLA、责任矩阵、供应商合同与法域模板的内容均标注为待确认或暂缓，不构成法律、合规或工程实现结论。</p>
   </footer>
 

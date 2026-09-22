@@ -255,6 +255,7 @@
     <ol>
       <li>选择 MemorySpace：<span class="mono">ms-proj-db</span>（project/p-db）、<span class="mono">ms-team-pay</span>（team/team-pay）、<span class="mono">ms-user-lin</span>（user）、<span class="mono">ms-agent-retriever</span>（agent）；长期 owner 只有这四类，平台不提供 public Memory。</li>
       <li>打开单条记忆（如 <span class="mono">m-9031</span> L1 原子「DB-Proxy 连接池上限 200」、<span class="mono">m-9044</span> L2 场景、<span class="mono">m-9102</span> L3 事实）：查看层级、<span class="mono">canonical_owner_scope</span>、来源与 revision、Purpose、敏感性、生命周期与可见范围。</li>
+      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（双时间轴为候选实现语义，见 §10.2）。</li>
       <li>读来源与版本：真源是规范对象与不可变 revision；Index、Projection、Snapshot 都是绑定 revision 的派生物（<span class="mono">Index ≠ Canonical Truth</span>）。</li>
       <li>纠错：提交 correction 或 transfer；纠正以追加 <span class="mono">correction_record</span> 的方式展示历史链，不覆盖原归属事实；只有显式 Transfer 才改变 owner。</li>
       <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。</li>
@@ -376,6 +377,7 @@
       <li>读候选归属与理由：信号分解包括 <span class="mono">explicit_user_selection / work_thread_owner / project_or_team_context / resource_path_and_revision / producer_identity / connector_metadata / participant_membership / recent_activity / content_semantics / historical_assignment</span>；置信度以「依据充分 / 有限 / 存在争议 / 尚未确认」表达，不显示虚假精确百分比。</li>
       <li>读候选目标与写权限：确认目标 MemorySpace 的写策略与 ACL，并验证 <span class="mono">target_scope ⊆ effective_scope</span>；目标空间管理员不能绕过来源 ACL。</li>
       <li>读脱敏预览、敏感性与来源血缘：确认脱敏版本与来源 revision；脱敏不扩大授权。</li>
+      <li>读生成溯源与机器合并建议：生成溯源显示产生本候选的<b>抽取 prompt 版本与生效范围</b>、来源消息区间、模型与参数指纹（可按生成日志反查「这条记忆是哪次生成产生的」）；机器合并建议给出 <span class="mono">ADD / UPDATE / SUPERSEDE / NOOP</span> 候选与逐条理由——它只是决策输入，<b>不自我裁决</b>，任何落位仍需人工确认（写入期自动裁决的可靠性教训见 §1.5）。</li>
       <li>做决策：自动落位 / 自动暂存候选 / 人工确认（治理队列）/ 隔离；跨边界、敏感或存在冲突的场景必须请求有权主体确认（来源 Owner 同意 + 目标接受）。</li>
       <li>写决策记录：<span class="mono">candidate_scopes / selected_scope / signal_refs / decision_reason / policy_version / model_or_rule_version / confidence / decided_at / reviewer</span>。</li>
     </ol>

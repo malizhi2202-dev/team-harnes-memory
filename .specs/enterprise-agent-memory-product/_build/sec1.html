@@ -100,4 +100,126 @@
         <tr><td>不用单一绿色标签掩盖未知</td><td><span class="mono">unknown ≠ zero</span>；无法证明时显示「未知 + 范围 + 证据时间 + 下一门槛」。</td></tr>
       </tbody>
     </table>
+
+    <h3 id="s1-5">1.5 竞品格局与我们的差异位</h3>
+    <p class="lead">本节回答：市面上已经有什么、它们把什么做成了默认动作、本平台站在哪里。事实底座是 2026-09-22 的四份联网调研稿 <span class="mono">_research/RECON-*.md</span>（每条结论带来源与【源码已落地 / 文档声称 / 营销宣传】档位，未验证项如实标注）；本增量已于 2026-09-22 18:56 过人工审核门（用户原话「通过」）。</p>
+
+    <div class="callout">
+      <h5>先说结论</h5>
+      <p class="small">全行业把「把记忆记下来」卷成了成熟件（异步 LLM 抽取、原始层无损留底、软删失效、namespace 隔离、前后台双分工）；但<b>没有一家把「候选 → 人工审核 → 受控发布 → 可证明撤回 → 行动前准入」做成对象链路</b>——头部玩家甚至正在放弃写入期的自动裁决。本平台的差异位不是「抽取更准」，而是把记忆当作可审计、可撤回、可执行准入的治理对象。</p>
+    </div>
+
+    <div class="tbl-wrap">
+    <table class="tbl compact">
+      <thead><tr><th style="width:14%">系统（形态与规模）</th><th style="width:16%">记忆模型</th><th style="width:17%">写入与合并</th><th style="width:16%">失效与时间线</th><th style="width:19%">治理与审计</th><th>与本产品的关系</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>TencentDB Agent Memory</b><br><span class="tiny muted">开源 team-level 记忆枢纽 · ≈27k 星 · 本设计内核现状宿主</span></td>
+          <td>四资产（Chat Memory L0–L3 / Skill / LLM-Wiki / Code-Graph）共用统一资产注册壳：版本、可见性、状态、置信度、过期、使用计数与内容体分离</td>
+          <td>反代与 API 捕获 → 异步批量抽取（每 N 轮 / 空闲触发）+ 向量去重；「模型可请求写入，空间落点服务端裁决」有真实对应物</td>
+          <td>资产壳有过期字段；清空内容可保留归属与绑定；但技能资产已改物理删除、无回收站</td>
+          <td>team/agent/user/task 隔离 + 三维 ACL（允许/拒绝）+ 生成日志反查 + 抽取 prompt 版本化；<b>无评审单对象、读路径无审计、「审核」停留文案</b></td>
+          <td>现状宿主：可吸收项（资产壳、装配强度分档、生成溯源、私有默认、清空保壳）中，生成溯源与合并建议已落 6.6，其余以候选记入 §10.2 与 <span class="mono">_research/FUSION-DECISIONS.md</span>；其治理缺口即本平台要补的范围（对照 1.3 能力地图）</td>
+        </tr>
+        <tr>
+          <td><b>mem0</b><br><span class="tiny muted">SDK/HTTP 记忆层 + 托管平台 · ≈66k 星</span></td>
+          <td>条目 + 实体链接；「记忆类型」三个枚举仅一个实现（文档自承）；真实分层是 user / agent / run 作用域键</td>
+          <td><b>招牌机制自我反转</b>：论文期的抽取期 ADD / UPDATE / DELETE / NOOP 四操作合并，2026-04 起改为单趟 ADD-only 只累积；矛盾并存，官方把冲突解决标 not planned，社区自建每周定时清理</td>
+          <td>过期=「隐藏不删除」、按 ID 仍可取、清日期即恢复；另有读侧时间推理排序缓解新旧并存</td>
+          <td>无候选态、无 Lineage（抽取用了哪些消息不落库）、无删除闭包；RBAC 仅组织/项目 × 两角色，防跨用户靠「记得传 user_id」口头建议；托管版有项目级事件日志与逐条修改历史，自托管没有</td>
+          <td>生产实锤反向印证审核门：逐条审 10,134 条自动记忆→<b>97.8% 是垃圾</b>；删除只删前 100 条却返回成功；部分嵌入失败静默丢写。「隐藏不删除 + 事件回执 + 真值与投影分面」三件可借鉴物已对照进 6.7 服务可见性与 §10.2（回滚窗口候选）</td>
+        </tr>
+        <tr>
+          <td><b>MemOS（记忆张量）</b><br><span class="tiny muted">「LLM 记忆操作系统」开源 + 云 · ≈11.5k 星</span></td>
+          <td>论文主张明文 / 激活 / 参数三形态 + MemCube 统一对象（元数据分描述/治理/行为三类）；现行 2.0 仓库以明文为主，激活与参数多为占位、文档标 Coming Soon</td>
+          <td>OS 隐喻调度：组织/整理插件<b>默认关闭、自承 beta</b>；快抽→精抽两段</td>
+          <td>代码侧有版本链、冲突归档与来源字段；失效时间线未成对外 API</td>
+          <td>论文治理叙事最全（权限三元组、审计日志、脱敏水印、Time Machine）；开源核心<b>无结构化审计日志组件</b>、无加密/脱敏；云版硬边界只有项目 API Key，项目内隔离靠调用方传字段；自报越权注入 issue（模式搜索缺归属过滤）</td>
+          <td>「记忆=一等系统资源」与本平台互证；其宣称-实现落差是本设计「待确认不冻结」纪律的反面教材。MemCube 元数据三分与 §2.3 的 MemoryItem 元数据同构，可作实现参照；其论文实验未覆盖治理面（未验证：35.24% token 节省无出处）</td>
+        </tr>
+        <tr>
+          <td><b>Zep / Graphiti</b><br><span class="tiny muted">时序知识图谱引擎 + 托管 · ≈31k 星</span></td>
+          <td>episode 无损留底 → 实体/fact 图（带类型边）→ 社区摘要；云端按 context types 预算装配</td>
+          <td>全自动六步 LLM 管线（抽取→日期标注→实体消解→fact 消解→摘要更新）；矛盾=旧边失效；「宁欠合并不过合并」；<b>无人工审核环节，抽取即生效</b></td>
+          <td><b>行业时间线天花板</b>：双时间轴四戳（何时为真 / 何时停止为真 × 系统何时得知 / 何时下架）、失效不删、支持时点查询；但失效不可逆、删 episode 后摘要不重算</td>
+          <td>SOC2 Type II / HIPAA / BYOK / BYOC；RBAC（人）+ABAC（机器）二分、episode metadata 投影到派生 fact 供过滤；级联删除有「无其他来源支持才删」判定；审计仅覆盖管理面且限企业档，数据面读取审计缺位</td>
+          <td>时间线、血缘投影、删除传播判定是本设计 Lineage/CopyInventory 的最强外部参照（6.7 时间线面板已采其语义做产品表达，Schema 留 §10.2）；行动授权官方明言留给客户——RunGate 补的正是这个洞</td>
+        </tr>
+        <tr>
+          <td><b>Letta（原 MemGPT）</b><br><span class="tiny muted">agent 服务器 · 2025-10 战略转向</span></td>
+          <td>旧 core/archival blocks 已遗留化；现行 MemFS＝<b>git 仓库化记忆</b>：常驻 system/ + 按需文件读</td>
+          <td>agent 在线自编辑（低摩擦）+ sleep-time 后台整理用 git worktree，<b>「整理者自审即应用，明示不要人批准」</b></td>
+          <td>git commit 文件级版本史；无现实有效/失效时间线</td>
+          <td>组织 RBAC、记忆默认私有；无公开合规面、无数据面审计、旧版覆写丢历史</td>
+          <td>双 agent 前写后理与「git=机械层 ChangeSet」可抄（对应 §1.5.2 缺口 3 的双速设计方向）；其自我审核恰好是我们人工发布门的对照面</td>
+        </tr>
+        <tr>
+          <td><b>AWS Bedrock AgentCore Memory</b><br><span class="tiny muted">云托管双层 · 2025-10 GA</span></td>
+          <td>Memory → Event（短留存 3–365 天）→ Record（长存）双层；三档策略（内置 / 覆盖 / 自管抽取）</td>
+          <td>异步抽取作业化 + 重驱动队列；整理三操作 Add/Update/Skip</td>
+          <td><b>record 就地改写、去重即物理删（有删除事件、无版本无时间线）</b>；回溯需客户沿导出流自建</td>
+          <td>治理基建最强宿主：namespace 条件键（缺键即 Deny）、Cedar FGAC、事件流可接客户审计；但批量写旁路 FGAC、数据面 CloudTrail 无文档、投毒防御外包客户</td>
+          <td>「控制面强、记忆语义薄」的双面样本；「条件键缺键即拒」与服务端裁决入参的 fail-closed 语义同构（本设计口径已在 §2.1/§2.5 成立，此为外部印证）</td>
+        </tr>
+        <tr>
+          <td><b>Google Agent Platform Memory Bank</b><br><span class="tiny muted">云托管 · 2025-12 GA（原 Vertex Memory Bank）</span></td>
+          <td>Memory → <b>不可变 MemoryRevision</b>（含合并前抽取中间产物、回滚、删除后 48h 恢复窗）；scope=≤5 对不可变 k-v 硬隔离</td>
+          <td>抽取→整理两阶段，LLM 判矛盾后 ADD/UPDATE/DELETE <b>覆盖式直接落库、无解释输出</b>；接受人工预筛条目但不构成审核门</td>
+          <td>版本史而非时间线：无 valid/invalid；「静默不生成」被官方定义为成功语义</td>
+          <td>专用 IAM 角色 + CEL 按 scope 条件授权（但批量清单与清除不吃条件=穿透风险）；regional CMEK / VPC-SC；方法级数据审计粒度未验证</td>
+          <td>revision 数据形状与 scope-IAM 是 Lineage/MemorySpace 的最接近外部形态（候选参照，Schema 不冻结，§10.2）；「删除可回滚窗口仅 48h」把闭包义务转嫁回客户，正是 CopyInventory 的叙事反证</td>
+        </tr>
+        <tr>
+          <td><b>其他与 C 端参照</b><br><span class="tiny muted">速览组</span></td>
+          <td>ChatGPT：保存记忆+摘要双态、Project 级隔离；Claude memory tool：模型自管 /memories 文件；supermemory / Memobase / LangMem / Cognee / A-MEM / HippoRAG 2 各占算法或画像生态位；OpenViking 等新玩家走文件分层隐喻；笔记服务 memos（63k 星）经澄清<b>不是 agent 记忆系统</b>（无抽取/分层/血缘/遗忘验证），仅可作证据源前端</td>
+          <td>共性：自动抽取、软删或改写并存；ChatGPT 删除按约 30 天窗口传播且分层不联动</td>
+          <td>普遍无时点查询；supermemory 有 isLatest 软删干跑</td>
+          <td>合规三件套（SOC2+BYOK+删除 API）成为云厂商与托管标配；数据面读取审计普遍缺位</td>
+          <td>「删除闭包与副本传播」连头部消费产品都未解决——CopyInventory 痛点普适的直接证据</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="tiny muted">来源档位：本表全部结论出自 <span class="mono">_research/</span> 调研稿（联网直抓 2026-09-22，含各仓库源码/文档/issue 链接），星数与版本号为当日快照；「未验证」项保留在调研稿、未写入本表结论句。</p>
+
+    <h4 id="s1-5b">1.5.1 行业趋同（默认动作，新进入者的门票）</h4>
+    <ol>
+      <li><b>抽取全异步、LLM 为核</b>：没有一家敢在线同步写全量记忆，「写入后延迟可见」是共同契约——本设计的 Import→Triage 链路与之一致；差异在链路终点接人工门。</li>
+      <li><b>原始层无损留底</b>：episode / event / L0 原文永久或按 TTL 保留，派生物只从原文生长——对应 §2.6 不变量⑤「新副本新 revision」。</li>
+      <li><b>失效趋软删/累加，但覆盖式仍存</b>：失效不删（Zep）、隐藏不删（mem0）、累加（mem0 v3）与就地改写+去重即删（AWS/Google）两代方案并存——本设计一律 invalidated/superseded 不物删，删除必须走 §4.6 证明链。</li>
+      <li><b>namespace/scope 是隔离原语但全是字符串约定</b>，无平台级 schema 治理——MemorySpace 的 owner 四类型 + 写策略枚举（§2.2/§2.4）是对该空位的第一次结构化回答。</li>
+      <li><b>双 agent 分工</b>：前台轻写、后台专职整理（Letta 首倡，各家以批处理变体重现）——本设计的自动分级 M0/M1/M2 + 巩固走 ChangeSet，等于给后台整理补上门。</li>
+      <li><b>文件/git 隐喻回归</b>（MemFS、虚拟文件树、/memories）对抗向量黑箱；但全部只做<b>版本史</b>，无人做到现实时间线+权限治理同时成立。</li>
+      <li><b>合规=SOC2+BYOK+删除 API 三件套</b>，且审计普遍只覆盖管理面——§2.4 数据面审计与 §4.6 副本闭包是超出门票的部分。</li>
+    </ol>
+
+    <h4 id="s1-5c">1.5.2 相对独有（调研范围内未见对应物）与相对缺口</h4>
+    <div class="split">
+      <div class="card pad-lg">
+        <p class="panel-title">独有卖点（截至 2026-09-22 调研零命中）</p>
+        <ol>
+          <li><b>人工发布门</b> Triage→ChangeSet→Review→Publish：无一家有版本化、可回滚的审核对象（Google 最接近也只是喂入预筛条目）。</li>
+          <li><b>RunGate 行动准入</b>：无人把「记忆影响行动」当治理对象；Zep 官方明言行动授权留给客户。</li>
+          <li><b>CopyInventory 副本闭包</b>：在线/缓存/索引/Embedding/Manifest/备份/Provider/终端的全链路撤回清单无人做；mem0「删 100 报成功」与 ChatGPT 30 天窗口证明痛点。</li>
+          <li><b>Purpose × ACL 双维</b>：竞品 ACL 只答「谁能看」，不答「为何用」。</li>
+          <li><b>跨 Harness 中立 + 工作现场连续性</b>：各竞品绑自家云或自家 harness；Work Thread / ContextManifest 交接无第二家。</li>
+        </ol>
+      </div>
+      <div class="card pad-lg">
+        <p class="panel-title">相对缺口（诚实清单；竞品已做而本设计未承诺）</p>
+        <ol>
+          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip warn">待确认</span></li>
+          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip warn">待确认（候选：MemoryItem 增现实有效区间 + superseded_by 关系化，§10.2）</span></li>
+          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip warn">待确认（§10.2）</span></li>
+          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。</li>
+          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。</li>
+          <li><b>成本与时延透明</b>：审核门+重算+闭包的成本结构未讲清，采购对比吃亏点。<span class="chip warn">待确认（§10.1 已标暂缓）</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <h5>本节的引用纪律</h5>
+      <p class="small">竞品基准分数（LoCoMo / LongMemEval / BEAM 等）一律<b>不进入本文档正文</b>：各家自报且 managed 与 OSS 混称、Zep 与 mem0 的方法论争议至今未决（详见 <span class="mono">_research/RECON-mem0.md §8.2</span>）。引用竞品事实保留三档标注【源码已落地 / 文档声称 / 营销宣传】；「行业零命中」结论附带日期与检索范围，竞品一旦补齐即失效——更新约定见 §10.5。</p>
+    </div>
   </section>

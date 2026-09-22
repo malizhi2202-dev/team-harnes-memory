@@ -280,6 +280,8 @@
                 <dt>可逆性</dt><dd>高（尚未写入任何空间，可直接驳回）</dd>
                 <dt>执行影响</dt><dd>无（本项不含 Action Proposal）</dd>
                 <dt>目标权限约束</dt><dd class="mono tiny">target_scope ⊆ source_allowed_scope · target_purpose ⊆ source_allowed_purpose</dd>
+                <dt>生成溯源</dt><dd class="mono tiny">抽取 prompt p-2026.09.2（对 team-pay 生效，版本可反查）· 来源消息 msg 118–142 · 抽取模型与参数指纹 sha256:3e7c1d · 生成日志 gl-6621</dd>
+                <dt>机器合并建议（仅参考，不自我裁决）</dt><dd class="tiny">与既有记忆比对后给出候选建议 <span class="mono">ADD · UPDATE · SUPERSEDE(m-8807) · NOOP</span> 与逐条理由；建议只是输入，任何落位仍需人工确认生成 ChangeSet（外部教训：写入期自动裁决既做不好也被放弃，见 §1.5）</dd>
                 <dt>复核人 / 截止</dt><dd class="mono">knowledge-owner · 2026-09-23 18:00</dd>
                 <dt>下一门槛</dt><dd>人工确认归属 → ChangeSet <span class="mono">cs-4410</span> Review → Publish（approved ≠ published）</dd>
               </dl>
@@ -416,6 +418,18 @@
                 </tbody>
               </table>
               <p class="tiny muted">派生对象与历史版本都纳入血缘与撤回传播：来源撤回 → 派生资产暂停或撤回 → 索引 / 缓存 / Manifest 失效 → 受影响 Run 阻断或重新解析 → 旧 Snapshot 只保留审计。</p>
+            </div>
+            <div class="panel">
+              <p class="panel-title">时间线与失效（双时间轴视图 · 含已下架历史条目）</p>
+              <table class="tbl compact">
+                <thead><tr><th>记忆</th><th>现实时间线（何时为真 / 何时停止为真）</th><th>系统时间线（何时得知 / 何时下架）</th><th>失效形态</th><th>服务可见性</th></tr></thead>
+                <tbody>
+                  <tr><td class="mono">m-9031</td><td class="mono tiny">valid_from 2026-08-14 · 至今为真</td><td class="mono tiny">created 2026-09-02 14:32 · 未下架</td><td><span class="chip ok">current</span></td><td class="tiny">检索、装配、召回均正常</td></tr>
+                  <tr><td class="mono">m-8807</td><td class="mono tiny">valid_from 2026-03-02 · valid_to 2026-08-13（连接池上限 180 → 200 变更后不再为真）</td><td class="mono tiny">created 2026-03-05 · invalidated 2026-08-14（由 m-9031 经 superseded_by 取代）</td><td><span class="chip warn">invalidated ≠ deleted</span></td><td class="tiny">默认退出召回与 Manifest；按 ID 审计读取仍可（retained ≠ service-visible，见 6.10）</td></tr>
+                  <tr><td class="mono">m-9102</td><td class="mono tiny">未生效（仅审核通过）</td><td class="mono tiny">approved 2026-09-21 14:32 · published 待发布构建</td><td><span class="chip">approved ≠ published</span></td><td class="tiny">发布成功后才可被召回；审批绑定的是该不可变版本</td></tr>
+                </tbody>
+              </table>
+              <p class="tiny muted">「现实时间线 × 系统时间线」双轨口径为候选实现语义（对标行业成熟形态，见 §1.5 与 §10.2，未冻结 Schema）。本屏先固化产品语义：<b>失效走标记与传播，不走物理删除</b>；「下架」「删除证明」「审计保留」是三种不同事实，分别记录、互不折算。</p>
             </div>
           </div>
         </div>

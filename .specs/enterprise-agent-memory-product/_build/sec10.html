@@ -59,7 +59,25 @@
             <td>最终 Schema / 阈值 / SLA</td>
             <td>议题讨论给出了语义方向</td>
             <td>缺少真实拓扑、责任人与法务决定</td>
-            <td><span class="chip">暂缓</span> 不冻结，见 §10.1 说明</td>
+            <td><span class="chip warn">待确认</span> 不冻结，见 §10.1 说明</td>
+          </tr>
+          <tr>
+            <td>现实时间线（双时间轴）</td>
+            <td>竞品调研：Zep 的「何时为真 / 何时停止为真 × 系统何时得知 / 何时下架」四戳与时点查询是行业最成熟形态；6.7 已用该语义做产品表达</td>
+            <td>本文档生命周期目前只表达「当前态」；议题层已否决第一版建完整图库，双时间轴是字段语义、不是图库，两者不冲突但 Schema 未冻结</td>
+            <td><span class="chip warn">待确认</span> 作为 MemoryItem / Lineage 的候选实现语义，由架构 change 裁决（见 §1.5.2 缺口 2）</td>
+          </tr>
+          <tr>
+            <td>删除的可逆窗口</td>
+            <td>竞品调研：Google 给删除后 48 小时恢复窗、mem0 过期=隐藏不删、ChatGPT 删除约 30 天传播——行业把「删除可逆」做成了限时产品参数</td>
+            <td>本设计口径「失效快、恢复迟」，不承诺统一恢复窗；恢复动作本身是新的受授权动作（不变量⑧）</td>
+            <td><span class="chip warn">待确认</span> 恢复窗口是否作为保留策略的显式参数，与 §10.1 Copy 行一并裁决</td>
+          </tr>
+          <tr>
+            <td>检索内核与在线写摩擦</td>
+            <td>竞品调研：混合多路 + rerank + 预算装配与「当场记住」的低摩擦在线写是竞品标配（其时延数字均为厂商自报）</td>
+            <td>本文档只定义 ContextManifest 契约与审核链路，不承诺内核指标；纯审核流对体验的代价如实列在 §1.5.2</td>
+            <td><span class="chip warn">待确认</span> 双速写入（个人空间直写 + 团队空间审核）进入 REQUIREMENT 裁决；检索内核归实现 change</td>
           </tr>
         </tbody>
       </table>
@@ -96,6 +114,8 @@
         <tr><td class="mono">.specs/enterprise-agent-memory-platform/01–10-*.md</td><td>十项权威议题的完整讨论与阶段性结论</td></tr>
         <tr><td class="mono">.specs/final-v1/DOMAIN-MODEL.md</td><td>对象、关系、归属与权限推导（只读参考）</td></tr>
         <tr><td class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</td><td>信息架构收敛稿（只读参考）</td></tr>
+        <tr><td class="mono">.specs/enterprise-agent-memory-product/_research/</td><td>2026-09-22 竞品调研事实层：<span class="mono">LOCAL-FACTS.md</span>（本地文档蒸馏与增量问题清单）+ <span class="mono">RECON-tencentdb-agent-memory.md · RECON-mem0.md · RECON-memos-memos.md · RECON-others.md</span>（含 Zep/Letta/AWS/Google 深查与 12 家速览）+ <span class="mono">FUSION-DECISIONS.md</span>（融合裁决表）。每条结论带来源与证据档位；随 §1.5 于 2026-09-22 18:56 过人工审核门（原话「通过」），其中标注「未验证」的内容仍不得作为下游决策依据</td></tr>
+        <tr><td class="mono">.specs/memory-platform-comparison-v2.md · .specs/intent-os-mindmemos-adoption.md</td><td>上一轮 Agent OS / MindMemOS 深调研与复核（含证伪与「禁止复活」清单）——§1.5 不重复其结论，被证伪的公式与参数不得回流本文档</td></tr>
       </tbody>
     </table>
 
@@ -106,5 +126,6 @@
       <li><b>§5 与 §6 联动。</b>新增或调整模块时，使用指南与界面原型必须一起改；§5.0 与 §7 的角色可见性必须同时更新。</li>
       <li><b>不冻结未决实现。</b>涉及 Schema、阈值、算法、SLA、责任矩阵、合同与法域模板的内容，一律保留「待确认 / 暂缓」标记，直到有真实输入。</li>
       <li><b>禁止宣称为最终结论。</b>本文档是产品设计文档，不是法律、合规或工程实现结论。</li>
+      <li><b>竞品结论时效约定（v0.3 新增）。</b>§1.5 的「行业零命中」「唯一对应物」等结论全部基于 2026-09-22 调研证据快照；引用竞品事实保留【源码已落地 / 文档声称 / 营销宣传】档位；竞品一旦新增审核门、数据面审计或行动准入，§1.5 对照行与 §1.5.2 卖点清单必须同步降级修订，禁止凭旧结论续用。上一轮调研（comparison-v2 / adoption 复核）中被证伪的公式与参数，不得以任何形式回流本文档。</li>
     </ul>
   </section>
