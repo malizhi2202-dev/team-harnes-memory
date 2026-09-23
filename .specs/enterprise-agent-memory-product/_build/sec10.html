@@ -21,12 +21,24 @@
         </tbody>
       </table>
     </div>
-    <div class="callout warn">
-      <p class="small" style="margin:0"><span class="chip warn">暂缓</span> 各类状态的自动判定阈值、置信度公式、超时与重试参数、SLA 与抽样率均未冻结；在缺少真实拓扑与责任人的情况下不自动固化。</p>
+    <div class="callout ok">
+      <p class="small" style="margin:0"><span class="chip ok">已裁 2026-09-23</span> 数字层改为「先取业内参考默认」：真实拓扑、责任人与法务口径仍保持暂缓；行为参数默认值采竞品在产在运的公共取值（每行带来源与证据档位）。<b>它们是产品可配置的默认值，不是产品质量承诺</b>；实现 change 可按真实拓扑覆盖，覆盖须记入策略版本并审计。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl compact">
+        <thead><tr><th style="width:20%">参数</th><th style="width:14%">业内参考默认</th><th style="width:36%">来源与档位</th><th>本设计用法</th></tr></thead>
+        <tbody>
+          <tr><td>检索返回条数 <span class="mono">top_k</span></td><td class="mono">10</td><td>mem0 与 AWS AgentCore 产品默认一致（mem0 默认 10、可配 1–1000；AgentCore topK 默认 10、上限 100）【源码已落地】</td><td>空间策略检索配置默认值；Agent 装配可收紧覆盖，实际参数进 ContextManifest</td></tr>
+          <tr><td>注入 token 预算（参考档）</td><td class="mono">≤ 7k / query</td><td>mem0 官方检索统计口径（厂商自称）【文档声称】</td><td>预算装配默认档参考，不作时延或质量承诺</td></tr>
+          <tr><td>删除可逆 / 回滚窗口</td><td class="mono">48 h</td><td>Google Memory Bank 生成删除的 revision 仅存 48h 可查回【源码已落地】</td><td>空间可选开启窗口时的推荐默认值（§10.2 C2 裁定：默认不设统一窗口；legal hold 期窗口无效）</td></tr>
+          <tr><td>过期 TTL 可配界</td><td class="mono">3–365 天</td><td>AWS AgentCore <span class="mono">eventExpiryDuration</span> 逐项合法区间【源码已落地】</td><td>空间保留策略 TTL 参数上下界；到期=隐藏不物删（§5.15 处置分级）</td></tr>
+          <tr><td>全量删除数字纪律</td><td>不依赖默认分页</td><td>mem0 <span class="mono">#6627</span>：delete_all 依赖向量库默认 top 100，只删 100 条却报"成功"（GDPR 表面成功事故）【源码已落地·教训】</td><td>清空/删除动作必须遍历全量并报告真实计数；回执计数以验证证据为准，不以请求数充当</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3 id="s10-2">10.2 口径冲突与待确认清单</h3>
-    <p>本文档在编写过程中发现以下尚未收敛的口径。它们被如实保留，不做单方面裁决。</p>
+    <p>本文档在编写过程中发现以下尚未收敛的口径。它们被如实保留，不做单方面裁决；已由用户在产品过审中裁定的条目改标「已裁」并注明日期与残留边界。</p>
     <div class="tbl-wrap">
       <table class="tbl compact">
         <thead><tr><th style="width:20%">条目</th><th style="width:32%">口径 A</th><th style="width:32%">口径 B</th><th>处理</th></tr></thead>
@@ -35,49 +47,49 @@
             <td>Team ↔ Project 基数</td>
             <td><span class="mono">final-v1/DOMAIN-MODEL.md</span> 与 <span class="mono">CONCEPTS.md</span>：每个 Project 必须且仅有一个 owning Team（1:N 归属）</td>
             <td><span class="mono">redesign-v3/DOMAIN-MODEL-AND-IA.md</span>：Team 与 Project 独立多对多协作关联，关联不授予项目权限</td>
-            <td><span class="chip warn">待确认</span> 本文档按 1:N 描述；实现前由架构 change 裁决</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> 用户裁定（原话「一个project仅仅属于一个team」）：<b>1:N owning 确立为本设计产品语义</b>，第 3、5、7 章现描述即定稿；口径 B 不再采纳（历史源保留）。边界：不变量①不受影响（关联/引用不授权）；存储外键与迁移归实现 change</td>
           </tr>
           <tr>
             <td>Run / Attempt 的嵌套层级</td>
             <td>议题 6 深化稿出现 WorkThread / Run / Attempt 三层</td>
             <td>本 change 的 <span class="mono">CONCEPTS.md</span> 只定义 Task / Run 两层</td>
-            <td><span class="chip warn">待确认</span> 第 5、6 章按 Task → Run 两层描述</td>
+            <td><span class="chip warn">待确认 · 归架构 change</span> Schema 层事项（审计粒度与事件流建模），无需产品侧预裁；议题深化稿的 WorkThread/Run/Attempt 三层留作架构输入，产品面现按 Task → Run 两层描述（第 5、6 章一致）</td>
           </tr>
           <tr>
             <td>ChangeSet 的适用范围</td>
             <td>议题 5 把它当作知识发布对象</td>
             <td>议题 6 的文本中未把它作为知识对象出现</td>
-            <td><span class="chip warn">待确认</span> 本文档按「内容变更的唯一审核对象」使用</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定（原话「是的装入进去」）：<b>Wiki / Skill / RCA 等知识发布统一装入 ChangeSet 审核容器</b>——「内容变更的唯一审核对象」同时覆盖记忆与知识，第 5.9/5.13/6.6 链路即定稿口径</td>
           </tr>
           <tr>
             <td>接口契约</td>
             <td>第 3.5 节列出的端点用于说明产品边界</td>
             <td>本 change 明确不实现真实 API</td>
-            <td><span class="chip warn">待确认</span> 全部端点标注为候选契约</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定：接口面 = <b>通用接口 + 配置化对接</b>（平台提供通用对接接口与配置，由接入方按配置适配具体系统，不逐对接对象定制实现）；§3.5 清单继续作为边界说明，端点命名与协议 Schema 归实现 change</td>
           </tr>
           <tr>
             <td>最终 Schema / 阈值 / SLA</td>
             <td>议题讨论给出了语义方向</td>
             <td>缺少真实拓扑、责任人与法务决定</td>
-            <td><span class="chip warn">待确认</span> 不冻结，见 §10.1 说明</td>
+            <td><span class="chip ok">部分已裁 2026-09-23</span> 数字层采<b>业内参考默认</b>（§10.1 默认值表，可配置、非质量承诺）；<span class="chip warn">待确认</span> 真实拓扑、责任人与法务口径保持暂缓</td>
           </tr>
           <tr>
             <td>现实时间线（双时间轴）</td>
             <td>竞品调研：Zep 的「何时为真 / 何时停止为真 × 系统何时得知 / 何时下架」四戳与时点查询是行业最成熟形态；6.7 已用该语义做产品表达</td>
             <td>本文档生命周期目前只表达「当前态」；议题层已否决第一版建完整图库，双时间轴是字段语义、不是图库，两者不冲突但 Schema 未冻结</td>
-            <td><span class="chip warn">待确认</span> 作为 MemoryItem / Lineage 的候选实现语义，由架构 change 裁决（见 §1.5.2 缺口 2）</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> MemoryItem 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳为产品语义（§2.3/§5.7/§6.7）；存储 Schema 与时点查询仍归实现 change（见 §1.5.2 缺口 2）</td>
           </tr>
           <tr>
             <td>删除的可逆窗口</td>
             <td>竞品调研：Google 给删除后 48 小时恢复窗、mem0 过期=隐藏不删、ChatGPT 删除约 30 天传播——行业把「删除可逆」做成了限时产品参数</td>
             <td>本设计口径「失效快、恢复迟」，不承诺统一恢复窗；恢复动作本身是新的受授权动作（不变量⑧）</td>
-            <td><span class="chip warn">待确认</span> 恢复窗口是否作为保留策略的显式参数，与 §10.1 Copy 行一并裁决</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定按建议口径：<b>空间保留策略可可选配置可逆窗口；默认不设统一窗口、恢复走受授权动作；legal hold 期间窗口无效</b>（§5.15 新步骤）。窗口时长与白名单等参数存法归实现 change</td>
           </tr>
           <tr>
             <td>检索内核与在线写摩擦</td>
             <td>竞品调研：混合多路 + rerank + 预算装配与「当场记住」的低摩擦在线写是竞品标配（其时延数字均为厂商自报）</td>
             <td>本文档只定义 ContextManifest 契约与审核链路，不承诺内核指标；纯审核流对体验的代价如实列在 §1.5.2</td>
-            <td><span class="chip warn">待确认</span> 双速写入（个人空间直写 + 团队空间审核）进入 REQUIREMENT 裁决；检索内核归实现 change</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> 双速写入采纳（个人直写 + 团队/项目审核，§2.3/§5.7）；检索三能力（混合多路、rerank、预算装配）做为用户可配可选进空间策略（§5.7）——内核实现、时延指标与亚秒体验仍不承诺，归实现 change</td>
           </tr>
         </tbody>
       </table>

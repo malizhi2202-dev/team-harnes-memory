@@ -1,3 +1,5 @@
+
+- 2026-09-23 · **enterprise-agent-memory-product v0.3.2 已过审（11:42「通过」）**：十项用户裁决落盘——检索三能力可配 / 双时间轴采纳 / 双速写入 / 模板画像供给 / Team↔Project 1:N owning（09-22）；删除可逆窗口口径（可可选窗·默认不设·legal hold 无效）/ ChangeSet 统一审核容器 / 接入体验延后成题 / 通用接口配置化对接 / 数字层业内参考默认表（09-23）。
 # CHANGELOG
 
 | 日期 | change-id | 摘要 | LESSONS |

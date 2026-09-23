@@ -208,11 +208,11 @@
       <div class="card pad-lg">
         <p class="panel-title">相对缺口（诚实清单；竞品已做而本设计未承诺）</p>
         <ol>
-          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip warn">待确认</span></li>
-          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip warn">待确认（候选：MemoryItem 增现实有效区间 + superseded_by 关系化，§10.2）</span></li>
-          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip warn">待确认（§10.2）</span></li>
-          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。</li>
-          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。</li>
+          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip ok">已裁 2026-09-22</span> 三项能力全部做成用户可配可选（空间默认 + Agent 覆盖，§5.7/§2.4）；内核实现与亚秒指标仍归实现 change。</li>
+          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip ok">已裁 2026-09-22</span> <span class="mono">MemoryItem</span> 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳（§2.3/§5.7/§6.7）；时点查询归实现 change。</li>
+          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip ok">已裁 2026-09-22</span> 双速写入采纳（直写 ≠ 对他人可见，§2.3/§5.7）。</li>
+          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。<span class="chip ok">已裁 2026-09-23</span> 用户裁定：接入体验确立为产品目标（「怎么方便让别人接入使用比较重要」）但<b>显式延后</b>，登记为议题另行立项（R18.4 留档 STATE）；期间 Connector 契约先行不变。</li>
+          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。<span class="chip ok">已裁 2026-09-22</span> 主题模板与画像专型供给采纳（§5.9；预装不绕过审核门，供给形态待实现 change 细化）。</li>
           <li><b>成本与时延透明</b>：审核门+重算+闭包的成本结构未讲清，采购对比吃亏点。<span class="chip warn">待确认（§10.1 已标暂缓）</span></li>
         </ol>
       </div>

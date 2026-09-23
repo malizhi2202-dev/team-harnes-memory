@@ -175,7 +175,7 @@
       <li><b>关系不等于权限</b>：Team 成员身份不等于关联 Project 的成员身份；TeamProject 关联不等于项目读写授权。</li>
       <li><b>绑定冲突</b>：显式无权目标直接拒绝；<span class="mono">context_conflict</span> 时不得回退到最近 Project、个人空间或相似 Project。</li>
       <li><b>归档</b>：Project 归档后其 MemorySpace 转只读或归档，保留历史 owner 与来源，不自动删除或转移记忆，也不静默改变 ACL。</li>
-      <li><span class="chip warn">待确认</span> Team ↔ Project 关系口径未收敛：<span class="mono">final-v1/DOMAIN-MODEL.md</span> §3 写「Team → Project 是一对多归属关系，每个 Project 必须且只能有一个 owning Team」；<span class="mono">redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3 写「多对多协作关联」。两处并存，本手册不自行裁决，只按“必须有唯一 owning Team + 协作关系不授予权限”执行操作口径。</li>
+      <li><span class="chip ok">已裁 2026-09-22</span> Team ↔ Project 关系口径曾并存两源：本手册按 <b>1:N 唯一 owning Team</b> 执行（用户裁定「一个project仅仅属于一个team」），协作关系与引用不授予权限；N:N 关联口径不再采纳，存储外键与迁移归实现 change（见 §10.2）。</li>
       <li><b>过期与筛选</b>：revision 变化或关系命中过期时标 <span class="mono">stale</span>；筛选为空与真为空分开。</li>
     </ul>
 
@@ -255,10 +255,11 @@
     <ol>
       <li>选择 MemorySpace：<span class="mono">ms-proj-db</span>（project/p-db）、<span class="mono">ms-team-pay</span>（team/team-pay）、<span class="mono">ms-user-lin</span>（user）、<span class="mono">ms-agent-retriever</span>（agent）；长期 owner 只有这四类，平台不提供 public Memory。</li>
       <li>打开单条记忆（如 <span class="mono">m-9031</span> L1 原子「DB-Proxy 连接池上限 200」、<span class="mono">m-9044</span> L2 场景、<span class="mono">m-9102</span> L3 事实）：查看层级、<span class="mono">canonical_owner_scope</span>、来源与 revision、Purpose、敏感性、生命周期与可见范围。</li>
-      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（双时间轴为候选实现语义，见 §10.2）。</li>
+      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（已裁 2026-09-22：MemoryItem 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳；时点查询与存储 Schema 归实现 change，见 §10.2）。</li>
       <li>读来源与版本：真源是规范对象与不可变 revision；Index、Projection、Snapshot 都是绑定 revision 的派生物（<span class="mono">Index ≠ Canonical Truth</span>）。</li>
       <li>纠错：提交 correction 或 transfer；纠正以追加 <span class="mono">correction_record</span> 的方式展示历史链，不覆盖原归属事实；只有显式 Transfer 才改变 owner。</li>
-      <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。</li>
+      <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。写入采<b>双速策略</b>（已裁 2026-09-22）：user 个人空间直写、当场可忆；team / project 空间仍走 Triage → ChangeSet → Review——直写不等于对他人可见，两速之间没有自动晋升。</li>
+      <li>配置检索内核（已裁 2026-09-22）：每个空间可独立配置<b>混合多路检索、rerank、预算装配</b>（token / 时延预算）三项能力——三项均可启用或关闭并各自选择参数，空间策略给默认、Agent 装配可收紧覆盖；<span class="mono">ContextManifest</span> 记录本次实际使用的配置参数与版本。本文档仍不承诺内核与亚秒级指标（归实现 change）。</li>
       <li>跨空间复用时走受控形态（<span class="mono">reference / promotion_candidate / derived_asset / published_asset / transfer</span>），默认 <span class="mono">reference_status=available</span>、<span class="mono">retrieval_status=restricted</span>、<span class="mono">action_status=blocked</span>。</li>
     </ol>
     <h4>结果反馈</h4>
@@ -302,6 +303,7 @@
     <h4>操作步骤</h4>
     <ol>
       <li>按类型进入专业页：Wiki 回答「这是什么 / 为什么」，Skill 回答「怎么做」，RCA 回答「为什么失败 / 如何避免复发」，Template 回答「从什么结构产出」，Code Context 回答「代码意味着什么 / 改动边界」。</li>
+      <li>开箱供给（已裁 2026-09-22）：<b>主题模板与角色画像专型</b>作为 Template 资产的实例化——新 Project / 新空间初始化时可选装，降低冷启动；预装只是候选与结构，团队空间内容仍需审核，模板预放不绕过任何审核门。供给形态（仅资产库或含初始化向导）留给实现 change 细化。</li>
       <li>读版本：<span class="mono">asset_version / parent_version / content_revision</span> 与来源 revision、policy 版本、脱敏版本；版本不可原地覆盖。</li>
       <li>读适用范围与消费者状态：<span class="mono">valid_from / valid_until</span>、<span class="mono">applies_to / does_not_apply_to</span>，以及分离的 <span class="mono">reference_status / retrieval_status / action_status</span>。</li>
       <li>发布或修订走 <span class="mono">#/changes</span> 的 Queue → Review → Publish（需要 <b>knowledge-owner</b>）；<span class="mono">approved ≠ published</span>。</li>
@@ -451,6 +453,7 @@
       <li>派发处置任务（需要 <b>governance</b> 角色）：范围快照 → 传播闸门 → 处置动作 → 验证 → 对账 → 关闭；每步绑定 <span class="mono">source_revision</span>、inventory snapshot、policy version、purpose、scope、idempotency key、attempt、deadline、stop condition 与证据引用。</li>
       <li>读验证证据等级：<span class="mono">E0</span> 未确认（默认不可声明完成）/ <span class="mono">E1</span> 传播或访问已阻断 / <span class="mono">E2</span> 逻辑处置已执行（留回执）/ <span class="mono">E3</span> 范围内验证 / <span class="mono">E4</span> 受控介质或责任方证明；等级不跨副本继承。</li>
       <li>读保留与保全四轨：服务轨道（立即阻断检索、投影、导出与执行）、生命周期轨道、保全轨道（法律保全与法定留存冻结指定范围与版本，须有责任人、依据、范围与解除条件）、恢复轨道（恢复前检查撤回与保全，恢复后生成新 inventory 并重跑阻断与验证）。</li>
+      <li>可逆窗口策略（已裁 2026-09-23）：空间保留策略可<b>可选配置</b>可逆窗口（删除后限时隐藏不物删、窗内可一键撤销）；默认<b>不设统一窗口</b>，恢复一律走受授权动作（重查撤回与保全 → 新 revision → 重跑传播）；<b>legal hold 期间窗口无效</b>，保全优先于恢复。窗口的配置、生效与失效全程入审计。</li>
       <li>读 Claim Boundary 五类：在线可控范围已验证 / 备份待生命周期到期 / 第三方已回执但未独立验证 / 离线或外部副本未知 / 依法保留。</li>
     </ol>
     <h4>结果反馈</h4>

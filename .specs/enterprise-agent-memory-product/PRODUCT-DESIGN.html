@@ -396,8 +396,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
   <span class="sep">/</span>
   <h1>Enterprise Agent Memory Platform · 产品设计文档 &amp; 界面原型</h1>
   <div class="tools">
-    <span class="chip mono">v0.3.1 · 2026-09-22</span>
-    <span class="chip ok">v0.3 已过审（18:56 人审「通过」）· v0.3.1 已过审（21:01 人审「通过」）</span>
+    <span class="chip mono">v0.3.2 · 2026-09-23</span>
+    <span class="chip ok">v0.3 / v0.3.1 / v0.3.2 均已过审（09-22 18:56 · 09-22 21:01 · 09-23 11:42「通过」）</span>
     <span class="chip warn">原型内所有数据均为演示假数据</span>
     <button class="btn sm theme-btn" id="theme-toggle" type="button" aria-live="polite"><svg class="icon" style="width:13px;height:13px"><use href="#i-refresh"/></svg><span id="theme-label">暗色</span></button>
     <button class="btn sm" onclick="window.print()">打印 / 存 PDF</button>
@@ -495,10 +495,10 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <table class="tbl compact">
       <thead><tr><th>项</th><th>值</th></tr></thead>
       <tbody>
-        <tr><td>文档版本</td><td class="mono">v0.3.1 · 2026-09-22 · v0.3 已过审（18:56 · 人审原话「通过」）；v0.3.1 增补（溯源缺失：§5.12 规则 / §6.6 tri-517 / §8 术语）已过审（21:01 · 人审原话「通过」）</td></tr>
+        <tr><td>文档版本</td><td class="mono">v0.3.2 · 2026-09-23 · v0.3 已过审（09-22 18:56）· v0.3.1 已过审（09-22 21:01）· v0.3.2 已过审（09-23 11:42 · 人审原话「通过」）：十项用户裁定（①–⑤ 2026-09-22：检索三能力可配/双时间轴采纳/双速写入/模板画像供给/Team↔Project 1:N；⑥–⑩ 2026-09-23：删除可逆窗口口径/ChangeSet 统一审核容器/接入体验延后成题/通用接口配置化对接/数字层业内参考默认表）落 §1.5.2/§2.3/§2.4/§3.2/§5.3/§5.7/§5.9/§5.15/§10.2；其余待确认项保持原状</td></tr>
         <tr><td>change-id</td><td class="mono">enterprise-agent-memory-product</td></tr>
         <tr><td>上游事实源</td><td class="mono">.specs/enterprise-agent-memory-platform/（权威议题 01–10）</td></tr>
-        <tr><td>竞品调研事实源</td><td class="mono">.specs/enterprise-agent-memory-product/_research/（LOCAL-FACTS + RECON ×4 · 2026-09-22 联网核验 · 调研稿未过审）</td></tr>
+        <tr><td>竞品调研事实源</td><td class="mono">.specs/enterprise-agent-memory-product/_research/（LOCAL-FACTS + RECON ×4 · 2026-09-22 联网核验 · 已随 v0.3 过审；「未验证/厂方自称」项不得被下游引用）</td></tr>
         <tr><td>本 change 文档</td><td class="mono">REQUIREMENT.md · DESIGN.md · CONCEPTS.md · ARCHITECTURE.md · UI-DESIGN.md</td></tr>
         <tr><td>对象与权限参照</td><td class="mono">.specs/final-v1/DOMAIN-MODEL.md · .specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</td></tr>
         <tr><td>视觉语汇来源</td><td class="mono">UI-DESIGN.md tokens（:root 与本文件同源）</td></tr>
@@ -716,11 +716,11 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <div class="card pad-lg">
         <p class="panel-title">相对缺口（诚实清单；竞品已做而本设计未承诺）</p>
         <ol>
-          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip warn">待确认</span></li>
-          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip warn">待确认（候选：MemoryItem 增现实有效区间 + superseded_by 关系化，§10.2）</span></li>
-          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip warn">待确认（§10.2）</span></li>
-          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。</li>
-          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。</li>
+          <li><b>检索内核与延迟工程</b>：hybrid+rerank+预算装配、亚秒级体验是 Zep/mem0 主场；本设计只定义 ContextManifest 契约，内核走实现 change。<span class="chip ok">已裁 2026-09-22</span> 三项能力全部做成用户可配可选（空间默认 + Agent 覆盖，§5.7/§2.4）；内核实现与亚秒指标仍归实现 change。</li>
+          <li><b>双时间轴现实时间线</b>：Zep 的 valid/invalid 四戳与时点查询；本设计 ChangeSet/Publish 时间 ≠ 现实有效时间。<span class="chip ok">已裁 2026-09-22</span> <span class="mono">MemoryItem</span> 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳（§2.3/§5.7/§6.7）；时点查询归实现 change。</li>
+          <li><b>低摩擦在线写</b>：纯审核流可能牺牲「当场记住」手感（Letta/Memobase buffer 模式赢在此）；缓解方向=个人空间直写 + 团队空间双速审核。<span class="chip ok">已裁 2026-09-22</span> 双速写入采纳（直写 ≠ 对他人可见，§2.3/§5.7）。</li>
+          <li><b>开发者接入面</b>：三行接入 / MCP / 37 集成页 vs 本设计 Connector 契约先行；生态差距真实。<span class="chip ok">已裁 2026-09-23</span> 用户裁定：接入体验确立为产品目标（「怎么方便让别人接入使用比较重要」）但<b>显式延后</b>，登记为议题另行立项（R18.4 留档 STATE）；期间 Connector 契约先行不变。</li>
+          <li><b>开箱画像/模板供给</b>：竞品 topic 模板与 profile 专型降低冷启动；本设计仅 Template/Code Context 抽象。<span class="chip ok">已裁 2026-09-22</span> 主题模板与画像专型供给采纳（§5.9；预装不绕过审核门，供给形态待实现 change 细化）。</li>
           <li><b>成本与时延透明</b>：审核门+重算+闭包的成本结构未讲清，采购对比吃亏点。<span class="chip warn">待确认（§10.1 已标暂缓）</span></li>
         </ol>
       </div>
@@ -814,8 +814,8 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <table class="tbl">
       <thead><tr><th style="width:18%">对象</th><th>定义</th></tr></thead>
       <tbody>
-        <tr><td><b>MemorySpace</b></td><td>记忆的归属、可见性与写策略边界。owner 只有 <span class="mono">user | team | project | agent</span> 四类；<b>不提供 public Memory</b>。</td></tr>
-        <tr><td><b>MemoryItem</b></td><td>记忆候选或已确认记忆：层级、来源、置信度、敏感性、Owner、Purpose 与生命周期。</td></tr>
+        <tr><td><b>MemorySpace</b></td><td>记忆的归属、可见性与写策略边界。owner 只有 <span class="mono">user | team | project | agent</span> 四类；<b>不提供 public Memory</b>。写入采<b>双速策略</b>（已裁 2026-09-22）：user 个人空间低摩擦直写，team / project 空间必须走审核链路——直写不等于对他人可见。</td></tr>
+        <tr><td><b>MemoryItem</b></td><td>记忆候选或已确认记忆：层级、来源、置信度、敏感性、Owner、Purpose 与生命周期。含<b>现实有效区间</b>（<span class="mono">valid_from / valid_to</span>，现实线）并与 <span class="mono">superseded_by</span> 取代关系化配合（已裁 2026-09-22；双时间轴表达见 §5.7/§6.7，时点查询与存储 Schema 归实现 change）。</td></tr>
         <tr><td><b>KnowledgeAsset</b></td><td>Wiki、Skill、RCA、Template、Code Context 等可复用资产；各有独立来源、版本与编辑语义。</td></tr>
         <tr><td><b>ChangeSet</b></td><td>对 Memory / Knowledge / Policy 的变更候选；经 Review 后 Publish。<b>内容变更的唯一审核对象。</b></td></tr>
         <tr><td><b>ProcedureTemplate</b></td><td>可复用步骤 / 流程；引用必须锁定版本，升级、复制或派生都是显式 ChangeSet，绝不自动持续同步。</td></tr>
@@ -829,7 +829,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <tbody>
         <tr><td><b>Purpose</b></td><td>本次读取、复用、导出或执行的用途。它参与权限判定，不是可选的备注字段。</td></tr>
         <tr><td><b>VisibilityContext</b></td><td>一次判定的完整可见上下文：主体、委托、源 / 目标空间、Purpose、ACL、敏感性、revision、环境与策略版本。</td></tr>
-        <tr><td><b>ContextManifest</b></td><td>本次 Run <b>实际使用</b>的记忆、知识与证据清单；是「effective」的不可变记录。</td></tr>
+        <tr><td><b>ContextManifest</b></td><td>本次 Run <b>实际使用</b>的记忆、知识与证据清单；是「effective」的不可变记录。并记录本次实际使用的<b>检索配置</b>（多路混合、rerank、预算装配）参数与版本——配置可追溯（已裁 2026-09-22，配置面见 §5.7）。</td></tr>
         <tr><td><b>CopyInventory</b></td><td>源资产的版本化副本清单：在线索引、缓存、Embedding、Manifest、导出、备份、Provider、终端。</td></tr>
         <tr><td><b>ExportAsset</b></td><td>绑定源 revision、范围、接收者、用途、有效期与证据的导出对象。</td></tr>
         <tr><td><b>ToolPolicy</b></td><td>工具能力的硬边界；<b>RunGate 不能放宽它</b>。</td></tr>
@@ -1125,7 +1125,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
         <td class="mono">Team</td>
         <td><span class="mono">team_id</span>、<span class="mono">members</span>、<span class="mono">default_policy</span>、<span class="mono">lifecycle_state</span></td>
         <td>
-          管理 Team scope 共享资源与默认规则。<span class="chip warn">待确认</span> Team↔Project 基数存在两种口径：<span class="mono">.specs/final-v1/DOMAIN-MODEL.md</span> §3.1 记为「Team → Project 是一对多归属关系，每个 Project 必须且只能有一个 owning Team」；<span class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3.1 记为「Team ↔ Project：多对多协作关联」，且 §2 明确「Team 不是 Project 的父目录」。两处口径冲突，本文件不自行裁决。
+          管理 Team scope 共享资源与默认规则。<span class="chip ok">已裁 2026-09-22</span> Team↔Project 基数曾有两种口径：<span class="mono">.specs/final-v1/DOMAIN-MODEL.md</span> §3.1「每个 Project 必须且只能有一个 owning Team（1:N）」；<span class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3.1「多对多协作关联」。用户裁定（原话「一个project仅仅属于一个team」）：<b>1:N owning 确立为本设计产品语义</b>，N:N 关联口径不再采纳（redesign-v3 仅作历史来源保留）；裁定不改变「归属 ≠ 权限」——协作关系、引用与成员身份仍不自动授予项目权限（不变量①）。见 §10.2。
         </td>
       </tr>
       <tr>
@@ -1861,7 +1861,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <li><b>关系不等于权限</b>：Team 成员身份不等于关联 Project 的成员身份；TeamProject 关联不等于项目读写授权。</li>
       <li><b>绑定冲突</b>：显式无权目标直接拒绝；<span class="mono">context_conflict</span> 时不得回退到最近 Project、个人空间或相似 Project。</li>
       <li><b>归档</b>：Project 归档后其 MemorySpace 转只读或归档，保留历史 owner 与来源，不自动删除或转移记忆，也不静默改变 ACL。</li>
-      <li><span class="chip warn">待确认</span> Team ↔ Project 关系口径未收敛：<span class="mono">final-v1/DOMAIN-MODEL.md</span> §3 写「Team → Project 是一对多归属关系，每个 Project 必须且只能有一个 owning Team」；<span class="mono">redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3 写「多对多协作关联」。两处并存，本手册不自行裁决，只按“必须有唯一 owning Team + 协作关系不授予权限”执行操作口径。</li>
+      <li><span class="chip ok">已裁 2026-09-22</span> Team ↔ Project 关系口径曾并存两源：本手册按 <b>1:N 唯一 owning Team</b> 执行（用户裁定「一个project仅仅属于一个team」），协作关系与引用不授予权限；N:N 关联口径不再采纳，存储外键与迁移归实现 change（见 §10.2）。</li>
       <li><b>过期与筛选</b>：revision 变化或关系命中过期时标 <span class="mono">stale</span>；筛选为空与真为空分开。</li>
     </ul>
 
@@ -1941,10 +1941,11 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <ol>
       <li>选择 MemorySpace：<span class="mono">ms-proj-db</span>（project/p-db）、<span class="mono">ms-team-pay</span>（team/team-pay）、<span class="mono">ms-user-lin</span>（user）、<span class="mono">ms-agent-retriever</span>（agent）；长期 owner 只有这四类，平台不提供 public Memory。</li>
       <li>打开单条记忆（如 <span class="mono">m-9031</span> L1 原子「DB-Proxy 连接池上限 200」、<span class="mono">m-9044</span> L2 场景、<span class="mono">m-9102</span> L3 事实）：查看层级、<span class="mono">canonical_owner_scope</span>、来源与 revision、Purpose、敏感性、生命周期与可见范围。</li>
-      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（双时间轴为候选实现语义，见 §10.2）。</li>
+      <li>看时间线与失效（6.7 双时间轴面板）：现实时间线回答「这条内容何时为真、何时停止为真」，系统时间线回答「我们何时得知、何时下架」；失效一律 <span class="mono">invalidated / superseded</span> 标记 + <span class="mono">superseded_by</span> 关系，不物理删除——「下架」「删除证明」「审计保留」是三种不同事实（已裁 2026-09-22：MemoryItem 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳；时点查询与存储 Schema 归实现 change，见 §10.2）。</li>
       <li>读来源与版本：真源是规范对象与不可变 revision；Index、Projection、Snapshot 都是绑定 revision 的派生物（<span class="mono">Index ≠ Canonical Truth</span>）。</li>
       <li>纠错：提交 correction 或 transfer；纠正以追加 <span class="mono">correction_record</span> 的方式展示历史链，不覆盖原归属事实；只有显式 Transfer 才改变 owner。</li>
-      <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。</li>
+      <li>空间策略：在 <span class="mono">#/memory/spaces</span> 查看四类空间的写策略、ACL 与生命周期；归档或只读状态只影响新写入，不改历史归属。写入采<b>双速策略</b>（已裁 2026-09-22）：user 个人空间直写、当场可忆；team / project 空间仍走 Triage → ChangeSet → Review——直写不等于对他人可见，两速之间没有自动晋升。</li>
+      <li>配置检索内核（已裁 2026-09-22）：每个空间可独立配置<b>混合多路检索、rerank、预算装配</b>（token / 时延预算）三项能力——三项均可启用或关闭并各自选择参数，空间策略给默认、Agent 装配可收紧覆盖；<span class="mono">ContextManifest</span> 记录本次实际使用的配置参数与版本。本文档仍不承诺内核与亚秒级指标（归实现 change）。</li>
       <li>跨空间复用时走受控形态（<span class="mono">reference / promotion_candidate / derived_asset / published_asset / transfer</span>），默认 <span class="mono">reference_status=available</span>、<span class="mono">retrieval_status=restricted</span>、<span class="mono">action_status=blocked</span>。</li>
     </ol>
     <h4>结果反馈</h4>
@@ -1988,6 +1989,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
     <h4>操作步骤</h4>
     <ol>
       <li>按类型进入专业页：Wiki 回答「这是什么 / 为什么」，Skill 回答「怎么做」，RCA 回答「为什么失败 / 如何避免复发」，Template 回答「从什么结构产出」，Code Context 回答「代码意味着什么 / 改动边界」。</li>
+      <li>开箱供给（已裁 2026-09-22）：<b>主题模板与角色画像专型</b>作为 Template 资产的实例化——新 Project / 新空间初始化时可选装，降低冷启动；预装只是候选与结构，团队空间内容仍需审核，模板预放不绕过任何审核门。供给形态（仅资产库或含初始化向导）留给实现 change 细化。</li>
       <li>读版本：<span class="mono">asset_version / parent_version / content_revision</span> 与来源 revision、policy 版本、脱敏版本；版本不可原地覆盖。</li>
       <li>读适用范围与消费者状态：<span class="mono">valid_from / valid_until</span>、<span class="mono">applies_to / does_not_apply_to</span>，以及分离的 <span class="mono">reference_status / retrieval_status / action_status</span>。</li>
       <li>发布或修订走 <span class="mono">#/changes</span> 的 Queue → Review → Publish（需要 <b>knowledge-owner</b>）；<span class="mono">approved ≠ published</span>。</li>
@@ -2137,6 +2139,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
       <li>派发处置任务（需要 <b>governance</b> 角色）：范围快照 → 传播闸门 → 处置动作 → 验证 → 对账 → 关闭；每步绑定 <span class="mono">source_revision</span>、inventory snapshot、policy version、purpose、scope、idempotency key、attempt、deadline、stop condition 与证据引用。</li>
       <li>读验证证据等级：<span class="mono">E0</span> 未确认（默认不可声明完成）/ <span class="mono">E1</span> 传播或访问已阻断 / <span class="mono">E2</span> 逻辑处置已执行（留回执）/ <span class="mono">E3</span> 范围内验证 / <span class="mono">E4</span> 受控介质或责任方证明；等级不跨副本继承。</li>
       <li>读保留与保全四轨：服务轨道（立即阻断检索、投影、导出与执行）、生命周期轨道、保全轨道（法律保全与法定留存冻结指定范围与版本，须有责任人、依据、范围与解除条件）、恢复轨道（恢复前检查撤回与保全，恢复后生成新 inventory 并重跑阻断与验证）。</li>
+      <li>可逆窗口策略（已裁 2026-09-23）：空间保留策略可<b>可选配置</b>可逆窗口（删除后限时隐藏不物删、窗内可一键撤销）；默认<b>不设统一窗口</b>，恢复一律走受授权动作（重查撤回与保全 → 新 revision → 重跑传播）；<b>legal hold 期间窗口无效</b>，保全优先于恢复。窗口的配置、生效与失效全程入审计。</li>
       <li>读 Claim Boundary 五类：在线可控范围已验证 / 备份待生命周期到期 / 第三方已回执但未独立验证 / 离线或外部副本未知 / 依法保留。</li>
     </ol>
     <h4>结果反馈</h4>
@@ -4358,12 +4361,24 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
         </tbody>
       </table>
     </div>
-    <div class="callout warn">
-      <p class="small" style="margin:0"><span class="chip warn">暂缓</span> 各类状态的自动判定阈值、置信度公式、超时与重试参数、SLA 与抽样率均未冻结；在缺少真实拓扑与责任人的情况下不自动固化。</p>
+    <div class="callout ok">
+      <p class="small" style="margin:0"><span class="chip ok">已裁 2026-09-23</span> 数字层改为「先取业内参考默认」：真实拓扑、责任人与法务口径仍保持暂缓；行为参数默认值采竞品在产在运的公共取值（每行带来源与证据档位）。<b>它们是产品可配置的默认值，不是产品质量承诺</b>；实现 change 可按真实拓扑覆盖，覆盖须记入策略版本并审计。</p>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl compact">
+        <thead><tr><th style="width:20%">参数</th><th style="width:14%">业内参考默认</th><th style="width:36%">来源与档位</th><th>本设计用法</th></tr></thead>
+        <tbody>
+          <tr><td>检索返回条数 <span class="mono">top_k</span></td><td class="mono">10</td><td>mem0 与 AWS AgentCore 产品默认一致（mem0 默认 10、可配 1–1000；AgentCore topK 默认 10、上限 100）【源码已落地】</td><td>空间策略检索配置默认值；Agent 装配可收紧覆盖，实际参数进 ContextManifest</td></tr>
+          <tr><td>注入 token 预算（参考档）</td><td class="mono">≤ 7k / query</td><td>mem0 官方检索统计口径（厂商自称）【文档声称】</td><td>预算装配默认档参考，不作时延或质量承诺</td></tr>
+          <tr><td>删除可逆 / 回滚窗口</td><td class="mono">48 h</td><td>Google Memory Bank 生成删除的 revision 仅存 48h 可查回【源码已落地】</td><td>空间可选开启窗口时的推荐默认值（§10.2 C2 裁定：默认不设统一窗口；legal hold 期窗口无效）</td></tr>
+          <tr><td>过期 TTL 可配界</td><td class="mono">3–365 天</td><td>AWS AgentCore <span class="mono">eventExpiryDuration</span> 逐项合法区间【源码已落地】</td><td>空间保留策略 TTL 参数上下界；到期=隐藏不物删（§5.15 处置分级）</td></tr>
+          <tr><td>全量删除数字纪律</td><td>不依赖默认分页</td><td>mem0 <span class="mono">#6627</span>：delete_all 依赖向量库默认 top 100，只删 100 条却报"成功"（GDPR 表面成功事故）【源码已落地·教训】</td><td>清空/删除动作必须遍历全量并报告真实计数；回执计数以验证证据为准，不以请求数充当</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <h3 id="s10-2">10.2 口径冲突与待确认清单</h3>
-    <p>本文档在编写过程中发现以下尚未收敛的口径。它们被如实保留，不做单方面裁决。</p>
+    <p>本文档在编写过程中发现以下尚未收敛的口径。它们被如实保留，不做单方面裁决；已由用户在产品过审中裁定的条目改标「已裁」并注明日期与残留边界。</p>
     <div class="tbl-wrap">
       <table class="tbl compact">
         <thead><tr><th style="width:20%">条目</th><th style="width:32%">口径 A</th><th style="width:32%">口径 B</th><th>处理</th></tr></thead>
@@ -4372,49 +4387,49 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
             <td>Team ↔ Project 基数</td>
             <td><span class="mono">final-v1/DOMAIN-MODEL.md</span> 与 <span class="mono">CONCEPTS.md</span>：每个 Project 必须且仅有一个 owning Team（1:N 归属）</td>
             <td><span class="mono">redesign-v3/DOMAIN-MODEL-AND-IA.md</span>：Team 与 Project 独立多对多协作关联，关联不授予项目权限</td>
-            <td><span class="chip warn">待确认</span> 本文档按 1:N 描述；实现前由架构 change 裁决</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> 用户裁定（原话「一个project仅仅属于一个team」）：<b>1:N owning 确立为本设计产品语义</b>，第 3、5、7 章现描述即定稿；口径 B 不再采纳（历史源保留）。边界：不变量①不受影响（关联/引用不授权）；存储外键与迁移归实现 change</td>
           </tr>
           <tr>
             <td>Run / Attempt 的嵌套层级</td>
             <td>议题 6 深化稿出现 WorkThread / Run / Attempt 三层</td>
             <td>本 change 的 <span class="mono">CONCEPTS.md</span> 只定义 Task / Run 两层</td>
-            <td><span class="chip warn">待确认</span> 第 5、6 章按 Task → Run 两层描述</td>
+            <td><span class="chip warn">待确认 · 归架构 change</span> Schema 层事项（审计粒度与事件流建模），无需产品侧预裁；议题深化稿的 WorkThread/Run/Attempt 三层留作架构输入，产品面现按 Task → Run 两层描述（第 5、6 章一致）</td>
           </tr>
           <tr>
             <td>ChangeSet 的适用范围</td>
             <td>议题 5 把它当作知识发布对象</td>
             <td>议题 6 的文本中未把它作为知识对象出现</td>
-            <td><span class="chip warn">待确认</span> 本文档按「内容变更的唯一审核对象」使用</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定（原话「是的装入进去」）：<b>Wiki / Skill / RCA 等知识发布统一装入 ChangeSet 审核容器</b>——「内容变更的唯一审核对象」同时覆盖记忆与知识，第 5.9/5.13/6.6 链路即定稿口径</td>
           </tr>
           <tr>
             <td>接口契约</td>
             <td>第 3.5 节列出的端点用于说明产品边界</td>
             <td>本 change 明确不实现真实 API</td>
-            <td><span class="chip warn">待确认</span> 全部端点标注为候选契约</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定：接口面 = <b>通用接口 + 配置化对接</b>（平台提供通用对接接口与配置，由接入方按配置适配具体系统，不逐对接对象定制实现）；§3.5 清单继续作为边界说明，端点命名与协议 Schema 归实现 change</td>
           </tr>
           <tr>
             <td>最终 Schema / 阈值 / SLA</td>
             <td>议题讨论给出了语义方向</td>
             <td>缺少真实拓扑、责任人与法务决定</td>
-            <td><span class="chip warn">待确认</span> 不冻结，见 §10.1 说明</td>
+            <td><span class="chip ok">部分已裁 2026-09-23</span> 数字层采<b>业内参考默认</b>（§10.1 默认值表，可配置、非质量承诺）；<span class="chip warn">待确认</span> 真实拓扑、责任人与法务口径保持暂缓</td>
           </tr>
           <tr>
             <td>现实时间线（双时间轴）</td>
             <td>竞品调研：Zep 的「何时为真 / 何时停止为真 × 系统何时得知 / 何时下架」四戳与时点查询是行业最成熟形态；6.7 已用该语义做产品表达</td>
             <td>本文档生命周期目前只表达「当前态」；议题层已否决第一版建完整图库，双时间轴是字段语义、不是图库，两者不冲突但 Schema 未冻结</td>
-            <td><span class="chip warn">待确认</span> 作为 MemoryItem / Lineage 的候选实现语义，由架构 change 裁决（见 §1.5.2 缺口 2）</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> MemoryItem 现实有效区间 + <span class="mono">superseded_by</span> 关系化采纳为产品语义（§2.3/§5.7/§6.7）；存储 Schema 与时点查询仍归实现 change（见 §1.5.2 缺口 2）</td>
           </tr>
           <tr>
             <td>删除的可逆窗口</td>
             <td>竞品调研：Google 给删除后 48 小时恢复窗、mem0 过期=隐藏不删、ChatGPT 删除约 30 天传播——行业把「删除可逆」做成了限时产品参数</td>
             <td>本设计口径「失效快、恢复迟」，不承诺统一恢复窗；恢复动作本身是新的受授权动作（不变量⑧）</td>
-            <td><span class="chip warn">待确认</span> 恢复窗口是否作为保留策略的显式参数，与 §10.1 Copy 行一并裁决</td>
+            <td><span class="chip ok">已裁 2026-09-23</span> 用户裁定按建议口径：<b>空间保留策略可可选配置可逆窗口；默认不设统一窗口、恢复走受授权动作；legal hold 期间窗口无效</b>（§5.15 新步骤）。窗口时长与白名单等参数存法归实现 change</td>
           </tr>
           <tr>
             <td>检索内核与在线写摩擦</td>
             <td>竞品调研：混合多路 + rerank + 预算装配与「当场记住」的低摩擦在线写是竞品标配（其时延数字均为厂商自报）</td>
             <td>本文档只定义 ContextManifest 契约与审核链路，不承诺内核指标；纯审核流对体验的代价如实列在 §1.5.2</td>
-            <td><span class="chip warn">待确认</span> 双速写入（个人空间直写 + 团队空间审核）进入 REQUIREMENT 裁决；检索内核归实现 change</td>
+            <td><span class="chip ok">已裁 2026-09-22</span> 双速写入采纳（个人直写 + 团队/项目审核，§2.3/§5.7）；检索三能力（混合多路、rerank、预算装配）做为用户可配可选进空间策略（§5.7）——内核实现、时延指标与亚秒体验仍不承诺，归实现 change</td>
           </tr>
         </tbody>
       </table>
@@ -4469,7 +4484,7 @@ footer.doc-foot{margin-top:var(--space-xl); padding-top:var(--space-md); border-
   </section>
 
   <footer class="doc-foot">
-    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.3.1 · 2026-09-22 · change-id <span class="mono">enterprise-agent-memory-product</span> · 状态: 已过审（v0.3 · 18:56「通过」；v0.3.1 · 21:01「通过」）</p>
+    <p style="margin:0 0 4px"><b>Enterprise Agent Memory Platform · 产品设计文档与界面原型</b> · v0.3.2 · 2026-09-23 · change-id <span class="mono">enterprise-agent-memory-product</span> · 状态: 已过审（v0.3 · 09-22 18:56；v0.3.1 · 09-22 21:01；v0.3.2 · 09-23 11:42 均「通过」）</p>
     <p class="small" style="margin:0">本文件为单文件离线文档，零外部依赖。第 6 章全部界面为只读静态原型，数据均为虚构演示数据，不连接后端、不产生真实副作用。涉及 Schema、阈值、算法、SLA、责任矩阵、供应商合同与法域模板的内容均标注为待确认或暂缓，不构成法律、合规或工程实现结论。</p>
   </footer>
 

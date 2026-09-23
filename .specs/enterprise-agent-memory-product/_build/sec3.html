@@ -231,7 +231,7 @@
         <td class="mono">Team</td>
         <td><span class="mono">team_id</span>、<span class="mono">members</span>、<span class="mono">default_policy</span>、<span class="mono">lifecycle_state</span></td>
         <td>
-          管理 Team scope 共享资源与默认规则。<span class="chip warn">待确认</span> Team↔Project 基数存在两种口径：<span class="mono">.specs/final-v1/DOMAIN-MODEL.md</span> §3.1 记为「Team → Project 是一对多归属关系，每个 Project 必须且只能有一个 owning Team」；<span class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3.1 记为「Team ↔ Project：多对多协作关联」，且 §2 明确「Team 不是 Project 的父目录」。两处口径冲突，本文件不自行裁决。
+          管理 Team scope 共享资源与默认规则。<span class="chip ok">已裁 2026-09-22</span> Team↔Project 基数曾有两种口径：<span class="mono">.specs/final-v1/DOMAIN-MODEL.md</span> §3.1「每个 Project 必须且只能有一个 owning Team（1:N）」；<span class="mono">.specs/redesign-v3/DOMAIN-MODEL-AND-IA.md</span> §3.1「多对多协作关联」。用户裁定（原话「一个project仅仅属于一个team」）：<b>1:N owning 确立为本设计产品语义</b>，N:N 关联口径不再采纳（redesign-v3 仅作历史来源保留）；裁定不改变「归属 ≠ 权限」——协作关系、引用与成员身份仍不自动授予项目权限（不变量①）。见 §10.2。
         </td>
       </tr>
       <tr>

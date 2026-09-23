@@ -81,8 +81,8 @@
     <table class="tbl">
       <thead><tr><th style="width:18%">对象</th><th>定义</th></tr></thead>
       <tbody>
-        <tr><td><b>MemorySpace</b></td><td>记忆的归属、可见性与写策略边界。owner 只有 <span class="mono">user | team | project | agent</span> 四类；<b>不提供 public Memory</b>。</td></tr>
-        <tr><td><b>MemoryItem</b></td><td>记忆候选或已确认记忆：层级、来源、置信度、敏感性、Owner、Purpose 与生命周期。</td></tr>
+        <tr><td><b>MemorySpace</b></td><td>记忆的归属、可见性与写策略边界。owner 只有 <span class="mono">user | team | project | agent</span> 四类；<b>不提供 public Memory</b>。写入采<b>双速策略</b>（已裁 2026-09-22）：user 个人空间低摩擦直写，team / project 空间必须走审核链路——直写不等于对他人可见。</td></tr>
+        <tr><td><b>MemoryItem</b></td><td>记忆候选或已确认记忆：层级、来源、置信度、敏感性、Owner、Purpose 与生命周期。含<b>现实有效区间</b>（<span class="mono">valid_from / valid_to</span>，现实线）并与 <span class="mono">superseded_by</span> 取代关系化配合（已裁 2026-09-22；双时间轴表达见 §5.7/§6.7，时点查询与存储 Schema 归实现 change）。</td></tr>
         <tr><td><b>KnowledgeAsset</b></td><td>Wiki、Skill、RCA、Template、Code Context 等可复用资产；各有独立来源、版本与编辑语义。</td></tr>
         <tr><td><b>ChangeSet</b></td><td>对 Memory / Knowledge / Policy 的变更候选；经 Review 后 Publish。<b>内容变更的唯一审核对象。</b></td></tr>
         <tr><td><b>ProcedureTemplate</b></td><td>可复用步骤 / 流程；引用必须锁定版本，升级、复制或派生都是显式 ChangeSet，绝不自动持续同步。</td></tr>
@@ -96,7 +96,7 @@
       <tbody>
         <tr><td><b>Purpose</b></td><td>本次读取、复用、导出或执行的用途。它参与权限判定，不是可选的备注字段。</td></tr>
         <tr><td><b>VisibilityContext</b></td><td>一次判定的完整可见上下文：主体、委托、源 / 目标空间、Purpose、ACL、敏感性、revision、环境与策略版本。</td></tr>
-        <tr><td><b>ContextManifest</b></td><td>本次 Run <b>实际使用</b>的记忆、知识与证据清单；是「effective」的不可变记录。</td></tr>
+        <tr><td><b>ContextManifest</b></td><td>本次 Run <b>实际使用</b>的记忆、知识与证据清单；是「effective」的不可变记录。并记录本次实际使用的<b>检索配置</b>（多路混合、rerank、预算装配）参数与版本——配置可追溯（已裁 2026-09-22，配置面见 §5.7）。</td></tr>
         <tr><td><b>CopyInventory</b></td><td>源资产的版本化副本清单：在线索引、缓存、Embedding、Manifest、导出、备份、Provider、终端。</td></tr>
         <tr><td><b>ExportAsset</b></td><td>绑定源 revision、范围、接收者、用途、有效期与证据的导出对象。</td></tr>
         <tr><td><b>ToolPolicy</b></td><td>工具能力的硬边界；<b>RunGate 不能放宽它</b>。</td></tr>
